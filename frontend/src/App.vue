@@ -10,7 +10,14 @@ import menu from './component/Menu';
 export default {
   name: 'app',
   mounted(){
-    console.log("mounted")
+    this.$store.commit({
+      type:'login',
+      islogin:true,
+      username:"ks",
+      photolist:["p1","p2"],
+      messagelist:["m1"]
+    })
+    console.log("mtd2")
   },
   components:{
     headerlist:menu
@@ -27,5 +34,8 @@ export default {
 *{
   padding:0;
   margin: 0;
+}
+body{
+  font-size: 0.8rem;
 }
 </style>

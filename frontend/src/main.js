@@ -47,12 +47,21 @@ router.afterEach((to, from, next) => {
       IsLogin:false,
       UserName:'',
       PhotoList:[],
-      Message:[]
+      MessageList:[]
+    },
+    mutations:{
+
+        login(state,params){
+            state.IsLogin=params.islogin;
+            state.UserName=params.username;
+            state.PhotoList=params.photolist;
+            state.MessageList=params.messagelist;
+        }
     }
   });
 new Vue({
   el: '#app',
- // store:store,
+  store:store,
   router: router,
   render: h => h(App)
 })
