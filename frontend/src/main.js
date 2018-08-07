@@ -53,7 +53,6 @@ router.afterEach((to, from, next) => {
       MessageList:[]
     },
     mutations:{
-
         login(state,params){
             state.IsLogin=params.islogin;
             state.UserName=params.username;

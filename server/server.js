@@ -31,18 +31,22 @@ app.use(session({
 // });
 
 function checklogin(req,res,next){ 
-    if(req.session.sign || req.path=="/login"){
+    if(req.session.sign || req.path=="/login" || req.path=="/check"){
         next();
     }else{
-        res.send({islogin:false})
+        res.redirect("/")
     }
 }
 app.use(checklogin);
 app.get("/check",(req,res,next)=>{
-    res.send(req.session.userinfo);
+	if(req.session.sign){
+    	res.send(req.session.userinfo);
+	}else{
+   		res.send({islogin:false})
+	}
 })
 app.post("/upload",(req,res,next)=>{
-    console.log(req.body.files)
+    console.log(req.files)
     res.send({status:"ok"})
 })
 app.post("/login",(req,res,next)=>{

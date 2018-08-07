@@ -38,10 +38,16 @@ export default {
 				});
 		},		
 		uploadimg(){
-			var fd=new FromData();
-			fd.files=this.files;
-			this.$http.post("/upload",f).then((res)=>{
-				console.log(fd)
+			let param = new FormData() 
+			this.files.forEach((item)=>{
+				param.append('file', item,item.name) 
+			})
+			
+			let config = {
+				headers: {'Content-Type': 'multipart/form-data'}
+			}
+			this.$http.post("/upload",param,config).then((res)=>{
+				console.log(res.data)
 			})
 		}
 	}

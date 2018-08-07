@@ -40,6 +40,8 @@ methods:{
     }else{
       this.msg='';
     }
+
+
     var cer={};
     cer.alias=this.alias;
     let md5 = crypto.createHash("md5");
@@ -66,7 +68,7 @@ methods:{
         this.$store.commit({
       type:'login',
       islogin:true,
-      username:"陈克胜",
+      username:"test陈克胜",
       photolist:["p1","p2"],
       messagelist:["m1"]
     })
