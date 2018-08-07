@@ -2,7 +2,7 @@
 <div class="container">
     <section>
       <div>
-    <h1>请登陆</h1>
+    <h1>请登录</h1>
       </div>
     <div>
       <article>账号:</article>
@@ -19,8 +19,8 @@
       <div class="errmsg"><label v-if="msg!=''">{{msg}}</label></div>
       <router-link to="/index">创建账号</router-link>
     </div>
-
-</section>  </div>
+  </section>  
+</div>
 </template>
 
 <script>
@@ -45,25 +45,34 @@ methods:{
     let md5 = crypto.createHash("md5");
     cer.pwd= md5.update(this.pwd).digest("hex");
     var xhr = new XMLHttpRequest();
-    xhr.open("get","/login")
-    xhr.onreadystatechange=()=>{
-      if(xhr.readyState==4 && xhr.status==200){
-        var obj = JSON.parse(xhr.responseText);
-        if(obj.islogin){
+
+    this.$http.post("/login",cer).then((res)=>{
+        console.log(res.data);
+        if(res.data.islogin){
             this.$store.commit({
               type:'login',
-              islogin:obj.islogin,
-              username:obj.username,
-              photolist:obj.photolist,
-              messagelist:obj.messagelist
-            })         
+              islogin:res.data.islogin,
+              username:res.data.username,
+              photolist:res.data.photolist,
+              messagelist:res.data.messagelist
+            }) 
+          this.$router.push("/index");        
         }else{
-          this.msg=obj.errorMsg;
+          this.msg=res.data.errorMsg;
         }
-      }
-    }
-    xhr.send();
+    })
   },
+  testlogin(){
+        this.$store.commit({
+      type:'login',
+      islogin:true,
+      username:"陈克胜",
+      photolist:["p1","p2"],
+      messagelist:["m1"]
+    })
+        this.$router.push("/index");
+  }
+  ,
   gotoindex(){
 
     this.$router.push('/index')
@@ -93,7 +102,10 @@ section>div{
   color: red;
   flex:0 0 8rem;
 }
-.btn{
+
+</style>
+<style>
+  .btn{
   user-select: none;
   padding: 0.5rem;
   text-align: center;

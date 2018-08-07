@@ -10,14 +10,18 @@ import menu from './component/Menu';
 export default {
   name: 'app',
   mounted(){
-    this.$store.commit({
-      type:'login',
-      islogin:true,
-      username:"ks",
-      photolist:["p1","p2"],
-      messagelist:["m1"]
+    this.$http.get("/check").then((res)=>{
+        this.$store.commit({
+              type:'login',
+              islogin:res.data.islogin,
+              username:res.data.username,
+              photolist:res.data.photolist,
+              messagelist:res.data.messagelist
+            }) 
+        if(!this.$store.state.IsLogin){
+          this.$router.push("/login");
+        }
     })
-    console.log("mtd2")
   },
   components:{
     headerlist:menu

@@ -4,6 +4,10 @@
         <div>
         <router-link to ="/index">首页</router-link>
         </div>
+        <div>
+            
+  <a href="http://zzfws.bjjs.gov.cn/enroll/home.jsp">住建部共有产权</a>
+        </div>
         <div v-if="IsLogin">
             User:{{UserName}}
         </div>
@@ -22,7 +26,6 @@ export default {
             return this.$store.state.UserName;
         },
         IsLogin(){
-            console.log(this.$store.state.IsLogin)
             return this.$store.state.IsLogin; 
         }
     }
@@ -37,6 +40,6 @@ header{
     padding: 1rem 0px;
 }
 hedaer+div{
-flex:0 0 70%；
+    flex:0 0 70%；
 }
 </style>

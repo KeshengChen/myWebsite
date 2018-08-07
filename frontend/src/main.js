@@ -1,10 +1,13 @@
 import Vue from 'vue';
-import Vuex from 'vuex'
+import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import App from './App.vue'
+import App from './App.vue';
+import Axios from 'axios';
+import VueAxios from 'vue-axios';
 
-Vue.use(VueRouter);
-Vue.use(Vuex);
+Vue.use(VueRouter)
+Vue.use(Vuex)
+Vue.use(VueAxios,Axios);
 // 路由配置
 const Routers = [
     {
@@ -17,7 +20,7 @@ const Routers = [
     {
         path: '/login',
         meta: {
-            title: '关于'
+            title: '登录'
         },
         component: (resolve) => require(['./component/login.vue'], resolve)
     },
