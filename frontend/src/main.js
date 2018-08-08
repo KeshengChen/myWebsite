@@ -13,16 +13,23 @@ const Routers = [
     {
         path: '/index',
         meta: {
-            title: '首页'
+          title: '首页'
         },
         component: (resolve) => require(['./component/index.vue'], resolve)
     },
     {
         path: '/login',
         meta: {
-            title: '登录'
+          title: '登录'
         },
         component: (resolve) => require(['./component/login.vue'], resolve)
+    },
+    {
+      path: '/signup',
+      meta: {
+        title: '创建账号'
+      },
+      component: (resolve) => require(['./component/signup.vue'], resolve)
     },
     {
         path: '*',

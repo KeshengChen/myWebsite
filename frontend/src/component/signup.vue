@@ -5,19 +5,27 @@
     <h1>请登录</h1>
       </div>
     <div>
-      <article>账号:</article>
+      <article>昵称</article>:
+      <input v-model="username" placeholder="输入昵称" type="text" />
+    </div>
+    <div>
+      <article>账号</article>:
       <input v-model="alias" placeholder="输入账号" type="text" />
     </div>
     <div>
-      <article>密码:</article>
-      <input v-model="pwd" placeholder="输入密码" type="password"/>
+      <article>密码</article>:
+      <input v-model="pwd1" placeholder="输入密码" type="password"/>
+    </div>
+    <div>
+      <article>确认密码</article>:
+      <input v-model="pwd2" placeholder="再次确认密码" type="password"/>
     </div>
   <div>
-      <div class="btn" @click.stop="login">登 录</div>
+      <div class="btn" @click.stop="login">创 建</div>
   </div>
   <div>
       <div class="errmsg"><label v-if="msg!=''">{{msg}}</label></div>
-      <router-link to="/signup">创建账号</router-link>
+      <router-link to="/login">登录</router-link>
     </div>
   </section>  
 </div>
@@ -27,57 +35,43 @@
 const crypto = require("crypto");
 export default {
 data(){
- return {alias:"",pwd:"",msg:""}
+ return {alias:"",pwd1:"",pwd2:"",username:"",msg:""}
 },
 methods:{
   login(){
-    if(this.alias==''){
+    if(this.username==''){
+      this.msg="请输入昵称。";
+      return;
+    }else if(this.alias==''){
       this.msg="请输入账号。";
       return;
-    }else if(this.pwd==''){
+    }else if(this.pwd1==''){
       this.msg="请输入密码。";
+      return;
+    }else if(this.pwd2==''){
+      this.msg="请确认密码。";
+      return;
+    }else if(this.pwd2!=this.pwd1){
+      this.msg="密码不一致。";
+      return;
+    }else if(this.pwd2.length<6){
+      this.msg="密码太短。";
       return;
     }else{
       this.msg='';
     }
 
 
+
     var cer={};
+    cer.username=this.username;
     cer.alias=this.alias;
     let md5 = crypto.createHash("md5");
-    cer.pwd= md5.update(this.pwd).digest("hex");
-    this.$http.post("/login",cer).then((res)=>{
-        console.log(res.data);
-        if(res.data.islogin){
-            this.$store.commit({
-              type:'login',
-              islogin:res.data.islogin,
-              username:res.data.username,
-              photolist:res.data.photolist,
-              messagelist:res.data.messagelist
-            }) 
-          this.$router.push("/index");        
-        }else{
-          this.msg=res.data.errorMsg;
-        }
-    })
-  },
-  testlogin(){
-        this.$store.commit({
-      type:'login',
-      islogin:true,
-      username:"test陈克胜",
-      photolist:["p1","p2"],
-      messagelist:["m1"]
-    })
-        this.$router.push("/index");
-  }
-  ,
-  gotoindex(){
+    cer.pwd= md5.update(this.pwd1).digest("hex");
 
-    this.$router.push('/index')
+    
+    }
   }
-}
 }
 </script>
 
@@ -87,7 +81,7 @@ article{
   width:3.2rem;
 }
 article:after{
-  width: 100%;
+  padding-left: 100%;
   display: inline-block;
   content: "";
   height: 0;
@@ -106,7 +100,7 @@ section{
 section>div{
   display: flex;
   justify-content: space-around;
-    align-items: baseline;
+  align-items: baseline;
   margin: 1rem;
 }
 .errmsg{
