@@ -2,7 +2,8 @@
 let express = require('express');
 let uuid = require('uuid');
 let path = require('path');
-let fs = require('fs')
+let mysql = require('mysql');
+let fs = require('fs');
 let process = require('child_process');
 let bodyParser = require('body-parser');
 let multer = require('multer');
@@ -29,6 +30,16 @@ app.use(session({
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //     next();
 // });
+let connection = mysql.createConnection({
+    host:"localhost",
+    port:3306,
+    user:"root",
+    password:"123147",
+    database:"testWebsite"
+})
+connection.query("select * from UserInfo",(result)=>{
+    console.log(result);
+})
 
 function checklogin(req,res,next){ 
     if(req.session.sign || req.path=="/login" || req.path=="/check"){
@@ -38,6 +49,19 @@ function checklogin(req,res,next){
     }
 }
 app.use(checklogin);
+app.get("/SignUp",(req,res,next)=>{});
+app.get("/Login",(req,res,next)=>{});
+app.get("/UploadHeadImage",(req,res,next)=>{});
+app.get("/ChangeUserInfo",(req,res,next)=>{});
+app.get("/Logout",(req,res,next)=>{});
+
+app.get("/CheckLogin",(req,res,next)=>{});
+app.get("/UploadPhoto",(req,res,next)=>{});
+app.get("/GetPhotoList",(req,res,next)=>{});
+
+
+
+
 app.get("/check",(req,res,next)=>{
 	if(req.session.sign){
     	res.send(req.session.userinfo);

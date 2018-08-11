@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="photolist">
-	    <div class="kuang" v-for="(src,index) in srcs">
+	    <div class="kuang" v-for="(src,index) in srcs" :key="index">
 			    <figure class="img" :style="src" @click="removeImg(index)"> </figure>			    
 	    </div>
 		<div class="kuang" v-if="srcs.length!=9" @click="addimg"><figure class="addsub" ><div></div><span></span></figure></div>
