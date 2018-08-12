@@ -1,7 +1,8 @@
+'use strict'
 let SQL = require('./sql.js');
 let mysql = require('mysql');
 
-export default functions = function(){
+export default function(){
     let newui=()=>{return {
         Id:-1,
         Alias:'',
@@ -34,18 +35,18 @@ export default functions = function(){
 
        
     };
-
-
-
-
-
 }
-app.get("/CheckUserNameExits",(req,res,next)=>{});
-app.get("/Login",(req,res,next)=>{});
-app.get("/UploadHeadImage",(req,res,next)=>{});
-app.get("/ChangeUserInfo",(req,res,next)=>{});
-app.get("/Logout",(req,res,next)=>{});
 
-app.get("/CheckLogin",(req,res,next)=>{});
-app.get("/UploadPhoto",(req,res,next)=>{});
-app.get("/GetPhotoList",(req,res,next)=>{});
+
+
+
+// }
+// app.get("/CheckUserNameExits",(req,res,next)=>{});
+// app.get("/Login",(req,res,next)=>{});
+// app.get("/UploadHeadImage",(req,res,next)=>{});
+// app.get("/ChangeUserInfo",(req,res,next)=>{});
+// app.get("/Logout",(req,res,next)=>{});
+
+// app.get("/CheckLogin",(req,res,next)=>{});
+// app.get("/UploadPhoto",(req,res,next)=>{});
+// app.get("/GetPhotoList",(req,res,next)=>{});

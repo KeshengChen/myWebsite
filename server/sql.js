@@ -1,4 +1,4 @@
-
+'use strict'
 export default SQL=function() {
     this.CheckUserNameExist = (alias)=>{
         return "SELECT CASE WHEN COUNT(*) = 1 THEN TRUE ELSE FALSE END AS Exist FROM UserInfo WHERE Alias = '"+alias+"'";
