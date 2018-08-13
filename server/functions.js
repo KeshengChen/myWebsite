@@ -1,8 +1,13 @@
 'use strict'
+   Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+
+
 let SQL = require('./sql.js');
 let mysql = require('mysql');
 
-export default function(){
+function functions (){
     let newui=()=>{return {
         Id:-1,
         Alias:'',
@@ -37,7 +42,7 @@ export default function(){
     };
 }
 
-
+exports.default = functions;
 
 
 // }
