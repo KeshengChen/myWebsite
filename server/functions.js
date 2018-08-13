@@ -4,9 +4,9 @@
     });
 
 
-let SQL = require('./sql.js');
+let sqlImport = require('./sql.js');
 let mysql = require('mysql');
-
+let SQL= sqlImport.SQL;
 function functions (){
     let newui=()=>{return {
         Id:-1,
@@ -42,7 +42,7 @@ function functions (){
     };
 }
 
-exports.default = functions;
+exports.functions = functions;
 
 
 // }

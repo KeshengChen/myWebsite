@@ -1,5 +1,5 @@
 'use strict'
-const SQL=function() {
+function SQL() {
     this.CheckUserNameExist = (alias)=>{
         return "SELECT CASE WHEN COUNT(*) = 1 THEN TRUE ELSE FALSE END AS Exist FROM UserInfo WHERE Alias = '"+alias+"'";
     }
@@ -34,4 +34,7 @@ const SQL=function() {
     //app.get("/UploadPhoto",(req,res,next)=>{});
     //app.get("/GetPhotoList",(req,res,next)=>{});
 }
-exports.default=SQL;
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.SQL=SQL;

@@ -2,7 +2,7 @@
 let express = require('express');
 let uuid = require('uuid');
 let path = require('path');
-let functions = require('./functions.js');
+let funImport = require('./functions.js');
 let bodyParser = require('body-parser');
 let multer = require('multer');
 let session = require('express-session');
@@ -28,8 +28,9 @@ app.use(session({
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //     next();
 // });
+let functions = funImport.functions;
 let x =new functions();
-x.SignUP({body:{Alias:"sa2",PassWord:"pwd"}});
+x.SignUp({body:{Alias:"sa2",PassWord:"pwd"}});
 function checklogin(req,res,next){ 
     if(req.session.sign || req.path=="/login" || req.path=="/check"){
         next();
