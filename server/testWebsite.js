@@ -1,4 +1,5 @@
 'use strict'
+let mysql = require('mysql');
 class testWebsite{
     constructor(){
         this.connection = mysql.createConnection({
@@ -60,9 +61,41 @@ class Table{
             }
         })
         let sql = "UPDATE " + this.TableName + " SET " + tmparr.join(",");
+        this.conn.query(sql,(err,result) =>{
+            if(err){
+                return {result:"ERR",err:err};
+            }else if(result.affectedRows<= 0){
+                return {result:"NO",msg:"Noting to changed"}
+            }else{
+                 return {result:"OK",msg:result.affectedRows + " row(s) changed"}
+            }
+        })
     }
     Select(obj){
-        
+        let tmparr=[];
+        let sql='';
+        if('number'==(typeof obj.Id) && obj.Id>=0){
+            sql = "SELECT * FROM " + this.TableName + " WERHE Id=" obj.Id;
+        }else{
+            this.fields.forEach((item)=>{
+                if("number" != typeof obj[item]){
+                    tmparr.push(item + " = '" + obj[item] + "'");
+                }else{
+                     tmparr.push(item + " = " + obj[item]);
+                }                
+            })
+            sql = "SELECT * FROM " + this.TableName + " WERHE " + tmparr.join(" AND ");
+        }
+        this.conn.query(sql,(err,result) =>{
+            if(err){
+                return {result:"ERR",err:err};
+            }else if(result.affectedRows<= 0){
+                return {result:"NO",msg:"No data matched"}
+            }else{
+                 return {result:"OK",msg:result.affectedRows + " row(s) selected",data:result};
+            }
+        })
+
     }
     getfields(){
         let r = [];
