@@ -23,11 +23,11 @@ app.use(session({
 }));
 
 //cors----
-// app.use( (req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-// });
+ app.use( (req, res, next) => {
+     res.header("Access-Control-Allow-Origin", "*");
+     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+     next();
+ });
 let functions = funImport.functions;
 let funs =new functions();
 function checklogin(req,res,next){ 
@@ -37,17 +37,19 @@ function checklogin(req,res,next){
         res.redirect("/")
     }
 }
-console.log(typeof funs.SignUp)
 app.use(checklogin);
+/*
 app.post("/SignUp",funs.SignUp);
 app.post("/CheckAliasExists",funs.CheckAliasExists);
-app.post("/Login",funs.Login);
+*/
+app.post("/Login",funs.Login.bind(funs));
+/*
 app.post("/UploadHeadImage",funs.UploadHeadImage);
 //app.post("/ChangeUserInfo",funs.ChangeUserInfo);
 app.post("/Logout",funs.Logout);
 
-app.post("/CheckLogin",funs.CheckLogin);
+//app.post("/CheckLogin",funs.CheckLogin);
 app.post("/UploadPhoto",funs.UploadPhoto);
 app.post("/GetPhotoList",funs.GetPhotoList);
-
+*/
 app.listen(8080);

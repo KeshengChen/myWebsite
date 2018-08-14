@@ -4,12 +4,11 @@
     });
 let DBImport = require('./testWebsite.js');
 let testWebsite= DBImport.testWebsite;
-
 class functions{
     constructor(){
         this.Database= new testWebsite();
-    }
-    async SignUp(req,res,next){
+	}
+/*    async SignUp(req,res,next){
         let ui=this.Database.UserInfo.NewRowData();
         ui.Alias = req.body.Alias;
         ui.UserName = req.body.UserName;
@@ -29,6 +28,7 @@ class functions{
     async CheckAliasExists(req,res,next){        
         let ui=this.Database.UserInfo.NewRowData();
         ui.Alias = req.body.Alias;
+		console.log("this",this)
         let r = await this.Database.UserInfo.Select(ui);
         if(r.result=="OK"){
             res.json({exist:true,msg:"账号已存在。"})
@@ -36,18 +36,25 @@ class functions{
             res.json({exist:false,msg:"账号不存在。"})
         }
     }
-    async Login(req,res,next){
+*/   
+ async Login(req,res,next){
         let Alias = req.body.Alias;
-        let PassWord = req.body.UserName;
-        let r = await this.Database.UserInfo.Select(ui);
+		let r = {};
+        let PassWord = req.body.PassWord;
+        try{
+			r = await this.Database.UserInfo.Select({Alias,PassWord});
+		}catch(e){
+			r = e;
+		}
         if(r.result=="OK"){
             req.session.sign=true;
             req.session.UserInfo=r.data;
-            res.json({login:true,msg:"登录成功。"});
+            res.json({login:true,username:r.data[0].UserName,msg:"登录成功。",photolist:[],messagelist:[]});
         }else{
             res.json({login:false,msg:"账户或密码不匹配。"});
         }
     }
+/*
     Logout(req,res,next){
         req.session.sign=false;
         req.session.UserInfo=undefined;
@@ -58,9 +65,9 @@ class functions{
     }
     CheckLogin(req,res,next){
         if(req.session.sign){
-            res.json({islogin:true});
+            res.json({login:true,username:req.session.UserInfo.UserName});
         }else{
-            res.json({islogin:false});
+            res.json({login:false});
         }
     }
     async UploadPhoto(req,res,next){
@@ -71,6 +78,7 @@ class functions{
         console.log(req.files.length);
         res.json({number:req.files.length})
     }
+*/
 }
 
 exports.functions = functions;

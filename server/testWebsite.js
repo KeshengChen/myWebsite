@@ -74,11 +74,13 @@ class Table{
             this.conn.query(sql,(err,result) =>{
 				if(err){
                     reject(err)
-                }else if(result.affectedRows<= 0){
-                    resolve({result:"NO",msg:"Nothing",data:result}) 
-                }else{
+                }else if(result.affectedRows && result.affectedRows > 0){
                     resolve({result:"OK",msg:result.affectedRows + " row(s) affected",data:result});
-                }
+                }else if(result.length && result.length>0){
+                    resolve({result:"OK",msg:result.length + " row(s) selected",data:result});
+                }else{
+                    resolve({result:"NO",msg:"Nothing",data:result}) 
+				}
             })
         })
     }
@@ -118,15 +120,3 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.testWebsite = testWebsite;
-
-
-// }
-// app.get("/CheckUserNameExits",(req,res,next) =>{});
-// app.get("/Login",(req,res,next) =>{});
-// app.get("/UploadHeadImage",(req,res,next) =>{});
-// app.get("/ChangeUserInfo",(req,res,next) =>{});
-// app.get("/Logout",(req,res,next) =>{});
-
-// app.get("/CheckLogin",(req,res,next) =>{});
-// app.get("/UploadPhoto",(req,res,next) =>{});
-// app.get("/GetPhotoList",(req,res,next) =>{});
