@@ -2,43 +2,24 @@
    Object.defineProperty(exports, "__esModule", {
         value: true
     });
+let DBImport = require('./testWebsite.js');
+let Database= DBImport.Database;
 
-
-let sqlImport = require('./sql.js');
-let mysql = require('mysql');
-let SQL= sqlImport.SQL;
-function functions (){
-    let newui=()=>{return {
-        Id:-1,
-        Alias:'',
-        UserName:'',
-        PassWord:'',
-        IsAdmin:0,
-        HeadPhoto:''
-    }};
-    this.connection = mysql.createConnection({
-        host:"localhost",
-        port:3306,
-        user:"root",
-        password:"123147",
-        database:"testWebsite"
-    })
-    this.sql=new SQL();
+class functions{
+    constructor(){
+        this.Database= new Database();
+    }
     this.SignUp=(req,res,next)=>{
-        let ui=newui();
+        let ui=this.Database.UserInfo.NewRowData();
+        console.log(ui)
         ui.Alias = req.body.Alias;
         ui.UserName = req.body.UserName;
         ui.PassWord = req.body.PassWord;
-        let sql = this.sql.SignUp(ui);
-        this.connection.query(sql,(err, result)=>{
-            console.log(result);
-        })
-        sql = this.sql.Login(ui.Alias,ui.PassWord);
-        this.connection.query(sql,(err, result)=>{
-            console.log(result);
-        })
-
-       
+        let r = this.Database.UserInfo.Select(ui);
+        console.log(r);
+        if(r.result="NO"){
+            console.log(this.Database.UserInfo.Insert(ui));
+        }
     };
 }
 
