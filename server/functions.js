@@ -18,12 +18,12 @@ class functions{
         if(r.result=="NO"){
             r = await this.Database.UserInfo.Insert(ui);
             if(r.result=="OK"){
-                res.json(signup:"OK",msg:"注册成功。")；
+				res.json({signup:"OK",msg:"注册成功。"});
             }else{
-                res.json(signup:"NO",msg:"注册失败。")；
+                res.json({signup:"NO",msg:"注册失败。"});
             }
         }else{
-            res.json(signup:"NO",msg:"注册失败。")；
+            res.json({signup:"NO",msg:"注册失败。"});
         }
     }
     async CheckAliasExists(req,res,next){        
@@ -43,15 +43,15 @@ class functions{
         if(r.result=="OK"){
             req.session.sign=true;
             req.session.UserInfo=r.data;
-            res.json(login:true,msg:"登录成功。")；
+            res.json({login:true,msg:"登录成功。"});
         }else{
-            res.json(login:false,msg:"账户或密码不匹配。")；
+            res.json({login:false,msg:"账户或密码不匹配。"});
         }
     }
     Logout(req,res,next){
         req.session.sign=false;
         req.session.UserInfo=undefined;
-        res.json({logout:"OK");
+        res.json({logout:"OK"});
     }
     UploadHeadImage(req,res,next){
         console.log(req.files[0].path);

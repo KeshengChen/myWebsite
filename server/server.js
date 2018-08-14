@@ -37,16 +37,17 @@ function checklogin(req,res,next){
         res.redirect("/")
     }
 }
+console.log(typeof funs.SignUp)
 app.use(checklogin);
-app.get("/SignUp",funs.SignUp);
-app.get("/CheckAliasExists",funs.CheckAliasExists);
-app.get("/Login",funs.Login);
-app.get("/UploadHeadImage",funs.UploadHeadImage);
-app.get("/ChangeUserInfo",funs.ChangeUserInfo);
-app.get("/Logout",funs.Logout);
+app.post("/SignUp",funs.SignUp);
+app.post("/CheckAliasExists",funs.CheckAliasExists);
+app.post("/Login",funs.Login);
+app.post("/UploadHeadImage",funs.UploadHeadImage);
+//app.post("/ChangeUserInfo",funs.ChangeUserInfo);
+app.post("/Logout",funs.Logout);
 
-app.get("/CheckLogin",funs.CheckLogin);
-app.get("/UploadPhoto",funs.UploadPhoto);
-app.get("/GetPhotoList",funs.GetPhotoList);
+app.post("/CheckLogin",funs.CheckLogin);
+app.post("/UploadPhoto",funs.UploadPhoto);
+app.post("/GetPhotoList",funs.GetPhotoList);
 
 app.listen(8080);

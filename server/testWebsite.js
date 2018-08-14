@@ -59,7 +59,9 @@ class Table{
             this.fields.forEach((item)=>{
                 if("number" != typeof obj[item]){
         			if(obj[item] != '' && obj[item] != undefined) {
-                }else{
+						tmparr.push(item + " = '" + obj[item]+"'");
+					}
+			    }else{
                      tmparr.push(item + " = " + obj[item]);
                 }                
             })
