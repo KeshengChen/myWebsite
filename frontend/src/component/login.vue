@@ -43,16 +43,17 @@ methods:{
 
 
     var cer={};
-    cer.alias=this.alias;
+    cer.Alias=this.alias;
+    cer.PassWord=this.pwd;
     let md5 = crypto.createHash("md5");
     cer.pwd= md5.update(this.pwd).digest("hex");
-    this.$http.post("/login",cer).then((res)=>{
+    this.$http.post("http://gfs920q.cn/Login",cer).then((res)=>{
         console.log(res.data);
         if(res.data.islogin){
             this.$store.commit({
               type:'login',
-              islogin:res.data.islogin,
-              username:res.data.username,
+              login:res.data.login,
+              username:res.data.UserName,
               photolist:res.data.photolist,
               messagelist:res.data.messagelist
             }) 
@@ -62,19 +63,7 @@ methods:{
         }
     })
   },
-  testlogin(){
-        this.$store.commit({
-      type:'login',
-      islogin:true,
-      username:"test陈克胜",
-      photolist:["p1","p2"],
-      messagelist:["m1"]
-    })
-        this.$router.push("/index");
-  }
-  ,
   gotoindex(){
-
     this.$router.push('/index')
   }
 }
