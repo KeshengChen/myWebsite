@@ -3,24 +3,23 @@
         value: true
     });
 let DBImport = require('./testWebsite.js');
-let Database= DBImport.Database;
+let testWebsite= DBImport.testWebsite;
 
 class functions{
     constructor(){
-        this.Database= new Database();
+        this.Database= new testWebsite();
     }
-    this.SignUp=(req,res,next)=>{
+    async SignUp(req,res,next){
         let ui=this.Database.UserInfo.NewRowData();
-        console.log(ui)
         ui.Alias = req.body.Alias;
         ui.UserName = req.body.UserName;
         ui.PassWord = req.body.PassWord;
-        let r = this.Database.UserInfo.Select(ui);
-        console.log(r);
-        if(r.result="NO"){
-            console.log(this.Database.UserInfo.Insert(ui));
+        let r = await this.Database.UserInfo.Select(ui);
+        console.log("r",r);
+        if(r.result=="NO"){
+            console.log("insert",await this.Database.UserInfo.Insert(ui));
         }
-    };
+    }
 }
 
 exports.functions = functions;

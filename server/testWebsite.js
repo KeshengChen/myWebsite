@@ -26,30 +26,19 @@ class Table{
             }
         })
         let sql = "INSERT INTO " + this.TableName + "(" + this.fields.join(",") + ") VALUES(" + tmparr.join(",") + ")";
-        this.conn.query(sql,(err,result) =>{
-            if(err){
-                return {result:"ERR",err:err};
-            }else{
-                return {result:"OK",data:result}
-            }
-        })
+        return this.Query(sql);
     }
     Delete(Id){
         let sql = "DELETE FROM " + this.TableName + " WHERE Id = " + Id;
-        this.conn.query(sql,(err,result) =>{
-            if(err){
-                return {result:"ERR",err:err};
-            }else if(result.affectedRows<= 0){
-                return {result:"NO",msg:"Noting to changed"}
-            }else{
-                 return {result:"OK",msg:result.affectedRows + " row(s) changed"}
-            }
-        })
+        return this.Query(sql);
     }
-    Update(obj){
-        let oldobj = this.Select(obj);
+    async Update(obj){
+        let oldobj = await this.Select(obj);
+		console.log("oldobj",oldobj)
         if(oldobj.result == "ERR") return oldobj;
-        oldobj = oldobj.data;
+        console.log("old",oldobj,oldobj.data)
+		oldobj = oldobj.data;
+		
         let tmparr = [];
         this.fields.forEach((item) =>{
             if(obj[item] !== oldobj[item]){
@@ -60,42 +49,44 @@ class Table{
                 }
             }
         })
-        let sql = "UPDATE " + this.TableName + " SET " + tmparr.join(",");
-        this.conn.query(sql,(err,result) =>{
-            if(err){
-                return {result:"ERR",err:err};
-            }else if(result.affectedRows<= 0){
-                return {result:"NO",msg:"Noting to changed"}
-            }else{
-                 return {result:"OK",msg:result.affectedRows + " row(s) changed"}
-            }
-        })
+	let sql = "UPDATE " + this.TableName + " SET " + tmparr.join(",");
+        
+        console.log("update",sql);
+return this.Query(sql);
     }
     Select(obj){
         let tmparr=[];
         let sql='';
         if('number'==(typeof obj.Id) && obj.Id>=0){
-            sql = "SELECT * FROM " + this.TableName + " WERHE Id=" obj.Id;
+            sql = "SELECT * FROM " + this.TableName + " WHERE Id=" + obj.Id;
         }else{
             this.fields.forEach((item)=>{
                 if("number" != typeof obj[item]){
-                    tmparr.push(item + " = '" + obj[item] + "'");
+			if(obj[item]=='') {
+				tmparr.push(item + " IS NULL");
+			}else{
+				tmparr.push(item + " = '" + obj[item] + "'");
+			}
                 }else{
                      tmparr.push(item + " = " + obj[item]);
                 }                
             })
-            sql = "SELECT * FROM " + this.TableName + " WERHE " + tmparr.join(" AND ");
+            sql = "SELECT * FROM " + this.TableName + " WHERE " + tmparr.join(" AND ");
         }
-        this.conn.query(sql,(err,result) =>{
-            if(err){
-                return {result:"ERR",err:err};
-            }else if(result.affectedRows<= 0){
-                return {result:"NO",msg:"No data matched"}
-            }else{
-                 return {result:"OK",msg:result.affectedRows + " row(s) selected",data:result};
-            }
+        return this.Query(sql);
+    }
+    Query(sql){
+        return new Promise((resolve,reject)=>{            
+            this.conn.query(sql,(err,result) =>{
+				if(err){
+                    reject(err)
+                }else if(result.affectedRows<= 0){
+                    resolve({result:"NO",msg:"Nothing",data:result}) 
+                }else{
+                    resolve({result:"OK",msg:result.affectedRows + " row(s) affected",data:result});
+                }
+            })
         })
-
     }
     getfields(){
         let r = [];
@@ -121,7 +112,7 @@ class Table{
                 UserName:'',
                 PassWord:'',
                 IsAdmin:0,
-                HeadPhoto:''
+                HeadImage:''
             }
         };
 
@@ -132,7 +123,7 @@ class Table{
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Datebase = testWebsite;
+exports.testWebsite = testWebsite;
 
 
 // }
