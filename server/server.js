@@ -29,63 +29,24 @@ app.use(session({
 //     next();
 // });
 let functions = funImport.functions;
-let x =new functions();
-x.SignUp({body:{Alias:"sa2",PassWord:"pwd"}});
+let funs =new functions();
 function checklogin(req,res,next){ 
-    if(req.session.sign || req.path=="/login" || req.path=="/check"){
+    if(req.session.sign || req.path=="/Login" || req.path=="/CheckLogin"){
         next();
     }else{
         res.redirect("/")
     }
 }
 app.use(checklogin);
-app.get("/SignUp",(req,res,next)=>{});
-app.get("/CheckUserNameExits",(req,res,next)=>{});
-app.get("/Login",(req,res,next)=>{});
-app.get("/UploadHeadImage",(req,res,next)=>{});
-app.get("/ChangeUserInfo",(req,res,next)=>{});
-app.get("/Logout",(req,res,next)=>{});
+app.get("/SignUp",funs.SignUp);
+app.get("/CheckAliasExists",funs.CheckAliasExists);
+app.get("/Login",funs.Login);
+app.get("/UploadHeadImage",funs.UploadHeadImage);
+app.get("/ChangeUserInfo",funs.ChangeUserInfo);
+app.get("/Logout",funs.Logout);
 
-app.get("/CheckLogin",(req,res,next)=>{});
-app.get("/UploadPhoto",(req,res,next)=>{});
-app.get("/GetPhotoList",(req,res,next)=>{});
-
-
-
-
-app.get("/check",(req,res,next)=>{
-	if(req.session.sign){
-    	res.send(req.session.userinfo);
-	}else{
-   		res.send({islogin:false})
-	}
-})
-app.post("/upload",(req,res,next)=>{
-    console.log(req.files)
-    res.send({status:"ok"})
-})
-app.post("/login",(req,res,next)=>{
-    try{
-        if(req.body.alias=='sa'){
-            req.session.userinfo={
-                    islogin:true,
-                    username:'陈克胜',
-                    photolist:[],
-                    messagelist:["m1"],
-                }
-            req.session.sign = true;
-            res.send(req.session.userinfo);
-        }else{
-            res.send({
-                islogin:false,
-                username:req.body.username,
-                photolist:[],
-                messagelist:[],
-            });
-        }
-    }catch(e){
-        res.send({errorMsg:e.message})
-    }
-});
+app.get("/CheckLogin",funs.CheckLogin);
+app.get("/UploadPhoto",funs.UploadPhoto);
+app.get("/GetPhotoList",funs.GetPhotoList);
 
 app.listen(8080);

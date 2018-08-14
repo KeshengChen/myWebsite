@@ -34,9 +34,7 @@ class Table{
     }
     async Update(obj){
         let oldobj = await this.Select(obj);
-		console.log("oldobj",oldobj)
         if(oldobj.result == "ERR") return oldobj;
-        console.log("old",oldobj,oldobj.data)
 		oldobj = oldobj.data;
 		
         let tmparr = [];
@@ -49,10 +47,8 @@ class Table{
                 }
             }
         })
-	let sql = "UPDATE " + this.TableName + " SET " + tmparr.join(",");
-        
-        console.log("update",sql);
-return this.Query(sql);
+        let sql = "UPDATE " + this.TableName + " SET " + tmparr.join(",");
+        return this.Query(sql);
     }
     Select(obj){
         let tmparr=[];
@@ -62,11 +58,7 @@ return this.Query(sql);
         }else{
             this.fields.forEach((item)=>{
                 if("number" != typeof obj[item]){
-			if(obj[item]=='') {
-				tmparr.push(item + " IS NULL");
-			}else{
-				tmparr.push(item + " = '" + obj[item] + "'");
-			}
+        			if(obj[item] != '' && obj[item] != undefined) {
                 }else{
                      tmparr.push(item + " = " + obj[item]);
                 }                
