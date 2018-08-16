@@ -2,44 +2,118 @@
 <div>
     <header>
         <div>
-        <router-link to ="/index">首页</router-link>
+            <ul>
+                <li><router-link to ="/index">首页</router-link></li>
+            </ul> 
         </div>
-        <div>
-            
-  <a href="http://zzfws.bjjs.gov.cn/enroll/home.jsp">住建部共有产权</a>
+        <div>    
+            <ul>
+                <li> <a href="http://zzfws.bjjs.gov.cn/enroll/home.jsp">住建部共有产权</a></li>
+            </ul> 
         </div>
-        <div v-if="IsLogin">
-            User:{{UserName}}
+        <div v-if="IsLogin">           
+            <ul>
+                <li style="font-weight:bold">{{UserName}}</li>
+                <li><a href="javascript:void(0)" @click="lgout">退出</a></li>
+                <li><router-link to = "/personal">设置</router-link></li>
+            </ul>
         </div>
         <div v-else>
-            
-        <router-link to = "/login">登录</router-link>
+            <ul>
+                <li><router-link to = "/login">登录</router-link></li>
+                <li><router-link to = "/signup">注册</router-link></li>
+            </ul>
         </div>
     </header>
-            </div>
+</div>
 </template>
 
 <script>
 export default {
     computed:{
-        UserName(){
+        UserName(){   
             return this.$store.state.UserName;
         },
         IsLogin(){
             return this.$store.state.IsLogin; 
+        }
+    },
+    methods:{
+        lgout(){
+            console.log(this.$store.state);
+            this.$store.commit({type:'logout'}) 
+            this.$router.push("/login");  
         }
     }
 }
 </script>
 
 <style scoped>
+*{
+    user-select: none;
+}
 header{
-    border:1px solid black;
+    background-color:rgba(5, 44, 104, 0.8);
     display: flex;
     justify-content: space-around;
-    padding: 1rem 0px;
+    height: 2rem;
+    align-items: stretch;
 }
-hedaer+div{
-    flex:0 0 70%；
+
+header>div{
+    flex:0 0 7rem;
+    align-items: center;
+    height: 100%;
+}
+a{
+    text-decoration:none;
+    display: block;
+    height: 100%;
+    width:100;
+    color:white;
+    line-height: 2rem;
+    text-align: center;
+}
+ul {    
+    height: 100%;
+    list-style: none;
+    position: relative
+}
+ul li:nth-child(n+2){
+    display: none;
+}
+ul li{
+    display: flex;
+    align-items: center;
+    color: white;
+    animation: usernamecolor 10s infinite;
+    justify-content: center;
+    height: 100%;
+    width:100%;
+    text-align: center;
+}
+@keyframes usernamecolor{
+    50%{
+        color: red;
+    }
+      60%,40%{
+        color:yellow;
+    }
+         80%,20%{
+        color:green;
+    }
+    0%,100%{
+        color: white;
+    }
+}
+ul:hover li{
+    background-color: azure;
+    display: flex;
+}
+ul li:hover{
+    background-color:red;
+}
+ul:hover li a{
+    color:black;
 }
 </style>

@@ -17,7 +17,20 @@
 <script>
 import login from './login';
 export default {
-
+	mounted(){
+		this.$http.post("http://gfs920q.cn/CheckLogin").then((res)=>{
+			this.$store.commit({
+				type:'login',
+				islogin:res.data.islogin,
+				username:res.data.username,
+				photolist:res.data.photolist,
+				messagelist:res.data.messagelist
+				}) 
+			if(!this.$store.state.IsLogin){
+			this.$router.push("/login");
+			}
+		})
+	},
 	data(){
 		return{files:[],srcs:[]}	
 	},

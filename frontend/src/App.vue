@@ -10,7 +10,7 @@ import menu from './component/Menu';
 export default {
   name: 'app',
   mounted(){
-    this.$http.get("/CheckLogin").then((res)=>{
+    this.$http.post("http://gfs920q.cn/CheckLogin").then((res)=>{
         this.$store.commit({
               type:'login',
               islogin:res.data.islogin,

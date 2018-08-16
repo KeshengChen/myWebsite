@@ -19,6 +19,7 @@ const Routers = [
     },
     {
         path: '/login',
+        name:"login",
         meta: {
           title: '登录'
         },
@@ -30,6 +31,13 @@ const Routers = [
         title: '创建账号'
       },
       component: (resolve) => require(['./component/signup.vue'], resolve)
+    },
+    {
+        path: '/personal',
+        meta: {
+          title: '登录'
+        },
+        component: (resolve) => require(['./component/personal.vue'], resolve)
     },
     {
         path: '*',
@@ -44,6 +52,9 @@ const RouterConfig = {
 const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
+    if(!store.state.IsLogin && to.name!='login'){
+        router.push({name:"login"});  
+    }
     window.document.title = to.meta.title;
     next();
 });
@@ -61,10 +72,17 @@ router.afterEach((to, from, next) => {
     },
     mutations:{
         login(state,params){
+            console.log(params);
             state.IsLogin=params.islogin;
             state.UserName=params.username;
             state.PhotoList=params.photolist;
             state.MessageList=params.messagelist;
+        },
+        logout(state){
+            state.IsLogin=false;
+            state.UserName="";
+            state.PhotoList=[];
+            state.MessageList=[];
         }
     }
   });

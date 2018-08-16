@@ -6,7 +6,7 @@
       </div>
     <div>
       <article>账号:</article>
-      <input v-model="alias" placeholder="输入账号" type="text" />
+      <input v-model="alias" placeholder="输入账号" type="text"/>
     </div>
     <div>
       <article>密码:</article>
@@ -27,7 +27,7 @@
 const crypto = require("crypto");
 export default {
 data(){
- return {alias:"",pwd:"",msg:""}
+ return {alias:"sa2",pwd:"pwd",msg:""}
 },
 methods:{
   login(){
@@ -48,15 +48,16 @@ methods:{
     let md5 = crypto.createHash("md5");
     cer.pwd= md5.update(this.pwd).digest("hex");
     this.$http.post("http://gfs920q.cn/Login",cer).then((res)=>{
-        console.log(res.data);
-        if(res.data.islogin){
-            this.$store.commit({
-              type:'login',
-              login:res.data.login,
-              username:res.data.UserName,
-              photolist:res.data.photolist,
-              messagelist:res.data.messagelist
-            }) 
+        if(res.data.login){
+          console.log(res.data)
+          this.$store.commit({
+            type:'login',
+            islogin:res.data.login,
+            username:res.data.username,
+            photolist:res.data.photolist,
+            messagelist:res.data.messagelist
+          }) 
+          this.msg=res.data.msg;
           this.$router.push("/index");        
         }else{
           this.msg=res.data.errorMsg;
