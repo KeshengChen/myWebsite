@@ -19,7 +19,6 @@ const Routers = [
     },
     {
         path: '/login',
-        name:"login",
         meta: {
           title: '登录'
         },
@@ -52,8 +51,8 @@ const RouterConfig = {
 const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
-    if(!store.state.IsLogin && to.name!='login'){
-        router.push({name:"login"});  
+    if(!store.state.IsLogin && to.path!='/login'){
+        router.push({path:"/login"});  
     }
     window.document.title = to.meta.title;
     next();
