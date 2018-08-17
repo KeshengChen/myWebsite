@@ -8,6 +8,7 @@
                 <div>上传</div>
             </span>
         </div> 
+        <div class="btn" @click="logout">退出登录</div>
         <input style="display:none;" type="file" ref="filterGetter" @change="getfiles($event)" accept="image/jpeg,image/gif"/>
     </div>
 </template>
@@ -20,11 +21,13 @@ export default {
     methods:{
         selectImage(){
 			this.$refs.filterGetter.click();
+        },        
+        lgout(){
+            this.$store.commit({type:'logout'}) 
+            this.$router.push("/login");  
         },
         getfiles(event){
-
-					this.src='background-image:url('+window.URL.createObjectURL(event.target.files[0])+')';
-				
+			this.src='background-image:url('+window.URL.createObjectURL(event.target.files[0])+')';				
 		}	
     }
 }
