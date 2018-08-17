@@ -52,6 +52,7 @@ const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
     if(!store.state.IsLogin && to.path!='/login'){
+        console.log("redirect");
         router.push({path:"/login"});  
     }
     window.document.title = to.meta.title;
@@ -71,7 +72,6 @@ router.afterEach((to, from, next) => {
     },
     mutations:{
         login(state,params){
-            console.log(params);
             state.IsLogin=params.islogin;
             state.UserName=params.username;
             state.PhotoList=params.photolist;

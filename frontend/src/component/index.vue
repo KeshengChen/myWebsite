@@ -18,18 +18,22 @@
 import login from './login';
 export default {
 	mounted(){
-		this.$http.post("http://gfs920q.cn/CheckLogin").then((res)=>{
-			this.$store.commit({
-				type:'login',
-				islogin:res.data.islogin,
-				username:res.data.username,
-				photolist:res.data.photolist,
-				messagelist:res.data.messagelist
-				}) 
-			if(!this.$store.state.IsLogin){
-			this.$router.push("/login");
-			}
-		})
+		if(!this.$store.state.IsLogin){
+			this.$http.post("http://gfs920q.cn/CheckLogin").then((res)=>{
+				console.log(res.data)
+				this.$store.commit({
+					type:'login',
+					islogin:res.data.islogin,
+					username:res.data.username,
+					photolist:res.data.photolist,
+					messagelist:res.data.messagelist
+					}) 
+				if(!this.$store.state.IsLogin){
+				this.$router.push("/login");
+				}
+			})
+			
+		}
 	},
 	data(){
 		return{files:[],srcs:[]}	
@@ -43,7 +47,6 @@ export default {
 			this.files.splice(ind,1)
 		},		
 		getfiles(event){
-			console.log(this.files)
 			new Array().map.call(event.target.files,
 				(item,index)=>{
 					this.files.push(item);
@@ -60,7 +63,6 @@ export default {
 				headers: {'Content-Type': 'multipart/form-data'}
 			}
 			this.$http.post("/upload",param,config).then((res)=>{
-				console.log(res.data)
 			})
 		}
 	}

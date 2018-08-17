@@ -49,7 +49,6 @@ methods:{
     cer.pwd= md5.update(this.pwd).digest("hex");
     this.$http.post("http://gfs920q.cn/Login",cer).then((res)=>{
         if(res.data.login){
-          console.log(res.data)
           this.$store.commit({
             type:'login',
             islogin:res.data.login,

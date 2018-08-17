@@ -40,7 +40,6 @@ export default {
     },
     methods:{
         lgout(){
-            console.log(this.$store.state);
             this.$store.commit({type:'logout'}) 
             this.$router.push("/login");  
         }

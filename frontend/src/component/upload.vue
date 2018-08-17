@@ -30,7 +30,6 @@ export default {
 			this.files.splice(ind,1)
 		},		
 		getfiles(event){
-			console.log(this.files)
 			new Array().map.call(event.target.files,
 				(item,index)=>{
 					this.files.push(item);
@@ -47,7 +46,6 @@ export default {
 				headers: {'Content-Type': 'multipart/form-data'}
 			}
 			this.$http.post("/upload",param,config).then((res)=>{
-				console.log(res.data)
 			})
 		}
 	}
