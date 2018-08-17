@@ -42,6 +42,9 @@ export default {
     background-size: cover;
     border-radius: 5rem;
 }
+.btn{
+    margin-top:3rem;
+}
 .headarea span{
     display: flex;
     position: absolute;

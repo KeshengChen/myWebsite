@@ -39,7 +39,8 @@ export default {
   padding:0;
   margin: 0;
 }
-body{
+body,input{
   font-size: 0.8rem;
+  line-height: 0.8rem;
 }
 </style>

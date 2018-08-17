@@ -13,14 +13,14 @@
         </div>
         <div v-if="IsLogin">           
             <ul>
-                <li style="font-weight:bold" @click="me">{{UserName}}</li>
+                <li style="font-weight:bold">{{UserName}}</li>
                 <li><a href="javascript:void(0)" @click="lgout">退出</a></li>
                 <li><router-link to = "/personal">设置</router-link></li>
             </ul>
         </div>
         <div v-else>
             <ul>
-                <li @click="me">我</li>
+                <li>我</li>
                 <li><router-link to = "/login">登录</router-link></li>
                 <li><router-link to = "/signup">注册</router-link></li>
             </ul>
@@ -40,9 +40,6 @@ export default {
         }
     },
     methods:{
-        me(){
-            this.$router.push("/personal");
-        },
         lgout(){
             this.$store.commit({type:'logout'}) 
             this.$router.push("/login");  
