@@ -10,18 +10,6 @@ import menu from './component/Menu';
 export default {
   name: 'app',
   mounted(){
-    this.$http.post("http://gfs920q.cn/CheckLogin").then((res)=>{
-        this.$store.commit({
-              type:'login',
-              islogin:res.data.islogin,
-              username:res.data.username,
-              photolist:res.data.photolist,
-              messagelist:res.data.messagelist
-            }) 
-        if(!this.$store.state.IsLogin){
-          this.$router.push("/login");
-        }
-    })
   },
   components:{
     headerlist:menu
@@ -42,5 +30,16 @@ export default {
 body,input{
   font-size: 0.8rem;
   line-height: 0.8rem;
+}
+.btn{
+  user-select: none;
+  padding: 0.5rem;
+  text-align: center;
+  box-shadow: 0.2rem 0.2rem rgba(38, 55, 87, 0.863);
+  width:100%;
+  background-color:rgba(94, 128, 190, 0.863);
+  border-radius: 0.3rem;
+  font-size: 1.2rem;
+  cursor:pointer;
 }
 </style>

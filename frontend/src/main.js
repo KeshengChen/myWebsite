@@ -4,10 +4,12 @@ import VueRouter from 'vue-router';
 import App from './App.vue';
 import Axios from 'axios';
 import VueAxios from 'vue-axios';
+import crypto from 'crypto';
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(VueAxios,Axios);
+Vue.prototype.crypto=crypto;
 // 路由配置
 const Routers = [
     {
@@ -16,20 +18,6 @@ const Routers = [
           title: '首页'
         },
         component: (resolve) => require(['./component/index.vue'], resolve)
-    },
-    {
-        path: '/login',
-        meta: {
-          title: '登录'
-        },
-        component: (resolve) => require(['./component/login.vue'], resolve)
-    },
-    {
-      path: '/signup',
-      meta: {
-        title: '创建账号'
-      },
-      component: (resolve) => require(['./component/signup.vue'], resolve)
     },
     {
         path: '/personal',
@@ -51,10 +39,10 @@ const RouterConfig = {
 const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
-    if(!store.state.IsLogin && to.path!='/login'){
-        console.log("redirect");
-        router.push({path:"/login"});  
-    }
+    // if(!store.state.IsLogin && to.path!='/login'){
+    //     console.log("redirect");
+    //     router.push({path:"/login"});  
+    // }
     window.document.title = to.meta.title;
     next();
 });

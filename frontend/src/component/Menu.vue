@@ -20,9 +20,7 @@
         </div>
         <div v-else>
             <ul>
-                <li>我</li>
-                <li><router-link to = "/login">登录</router-link></li>
-                <li><router-link to = "/signup">注册</router-link></li>
+                <li><router-link to="/personal">我</router-link></li>
             </ul>
         </div>
     </header>
@@ -42,7 +40,7 @@ export default {
     methods:{
         lgout(){
             this.$store.commit({type:'logout'}) 
-            this.$router.push("/login");  
+            this.$router.push("/personal");  
         }
     }
 }
