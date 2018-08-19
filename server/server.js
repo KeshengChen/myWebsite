@@ -47,8 +47,9 @@ app.post("/Login",funs.Login.bind(funs));
 app.post("/UploadHeadImage",funs.UploadHeadImage);
 //app.post("/ChangeUserInfo",funs.ChangeUserInfo);
 app.post("/Logout",funs.Logout);
-
-//app.post("/CheckLogin",funs.CheckLogin);
+*/
+app.post("/CheckLogin",funs.CheckLogin);
+/*
 app.post("/UploadPhoto",funs.UploadPhoto);
 app.post("/GetPhotoList",funs.GetPhotoList);
 */
