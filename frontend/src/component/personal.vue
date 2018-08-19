@@ -2,8 +2,16 @@
     <div>
         <section>
             <div v-if="this.$store.state.IsLogin">
+                <div v-if="allscreen" class="maximage" >
+                    <div>
+                        <a href="javascript:void(0)" @click="hideallsc">返回</a>
+                        <a v-if="!headchanged" href="javascript:void(0)" @click="selectImage">修改</a>
+                        <a v-else href="javascript:void(0)" @click="saveHeadImage">保存</a>
+                    </div>
+                    <div :style="src"></div>
+                </div>
                 <div class="userinfo">
-                    <div class="headarea"  :style="src"></div> 
+                    <div class="headarea"  :style="src" @click="fillallsc"></div> 
                     <div style="flex:0 0 1rem"></div>
                     <div class="userdetail">
                         <div>{{this.$store.state.UserName}}<span>&equiv;</span></div>
@@ -42,7 +50,7 @@
                     <a href="javascript:void(0)" @click="swapModel">{{issignup?"登录":"创建账号"}}</a>
                 </div>
             </div>
-        <input style="display:none;" type="file" ref="filterGetter" @change="getfiles($event)" accept="image/jpeg,image/gif"/>
+        <input style="display:none;" type="file" ref="filterGetter" @change="getfiles($event)" accept="image/jpeg,image/png"/>
         </section>
     </div>
 </template>
@@ -50,17 +58,35 @@
 <script>
 export default {
     data(){
-        return {headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false}
+        return {allscreen:false,headchanged:false,headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false}
     },
     methods:{
         selectImage(){
 			this.$refs.filterGetter.click();
-        },        
+        }, 
+        saveHeadImage(){
+            this.headchanged=false;
+            console.log("saveHeadImage 000")
+        },
+        fillallsc(){
+            this.allscreen=true;
+        }, 
+        hideallsc(){
+            if(this.headchanged){
+                if(confirm("保存？")){
+                    this.saveHeadImage();
+                }
+            }
+          this.allscreen=false;  
+        },   
         logout(){
             this.$store.commit({type:'logout'}) 
         },
         getfiles(event){
-			this.src='background-image:url('+window.URL.createObjectURL(event.target.files[0])+')';				
+            if(event.target.files.length>0){
+                this.headchanged=true;
+			    this.src='background-image:url('+window.URL.createObjectURL(event.target.files[0])+')';				
+            }
         },
         swapModel(){
             this.issignup=!this.issignup;
@@ -129,6 +155,44 @@ export default {
 </script>
 
 <style scoped>
+.maximage{
+    background: gray; 
+    position: fixed; 
+    left: 0px; 
+    top: 0px; 
+    width: 100%; 
+    height: 100%;  
+    z-index: 20; 
+}
+.maximage div:nth-child(1){
+    display: flex;
+    width: 100%;
+    height: 2rem;
+    justify-content: space-between;
+    align-items: center;
+}
+.maximage div:nth-child(2){
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin:auto;
+    position: absolute;
+    background-color: white;
+    width:100%;
+    height: 100vw;
+    background-size: cover;
+}
+@keyframes allsc {
+    0%{
+        height: 1rem;
+        width: 1rem;
+    }
+    100%{
+        width:100%;
+        height: 100vw;
+    }
+}
 section{
     padding: 2rem;
 }
@@ -166,9 +230,6 @@ section{
 
 .login{
     padding:1rem;
-}
-.login *{
-    border:1px solid black;
 }
 .login > div{
     display:flex;
