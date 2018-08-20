@@ -61,16 +61,20 @@ export default {
         return {allscreen:false,headchanged:false,headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false,file:false}
     },
     computed:{
-        HIsrc(){
-            this.$http.post("/HeadImage").then((res)=>{
-                if(!res.data.success){
-                    return "";    
-                }else{
-                    this.src='background-image:url('+window.URL.createObjectURL(new Blob(res.data))+')'
-                    return this.src;	
-                }
-            })
-        }            
+       async HIsrc(){
+let x="";
+         try{
+			 x = await this.$http.post(
+				"/HeadImage",undefined,{responseType:'blob'}
+			).then(
+				(res)=>{
+					 let tmp='background-image:url('+window.URL.createObjectURL(res.data)+')'
+					return tmp;			
+				}
+			)}catch(e){
+			x=""
+		}		
+		return x
     },
     methods:{
         selectImage(){
