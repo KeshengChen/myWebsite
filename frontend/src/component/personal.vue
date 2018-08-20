@@ -62,12 +62,11 @@ export default {
     },
     computed:{
         HIsrc(){
-            this.$http.post("/HeadImage",cer).then((res)=>{
-                console.log(res.data)
+            this.$http.post("/HeadImage").then((res)=>{
                 if(!res.data.success){
                     return "";    
                 }else{
-                    this.src='background-image:url('+window.URL.createObjectURL(res.blob())+')'
+                    this.src='background-image:url('+window.URL.createObjectURL(new Blob(res.data))+')'
                     return this.src;	
                 }
             })
