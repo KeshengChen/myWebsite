@@ -43,9 +43,9 @@ app.post("/SignUp",funs.SignUp);
 app.post("/CheckAliasExists",funs.CheckAliasExists);
 */
 app.post("/Login",funs.Login.bind(funs));
-/*
-app.post("/UploadHeadImage",funs.UploadHeadImage);
-//app.post("/ChangeUserInfo",funs.ChangeUserInfo);
+
+app.post("/UploadHeadImage",funs.UploadHeadImage.bind(funs));
+/*app.post("/ChangeUserInfo",funs.ChangeUserInfo);
 app.post("/Logout",funs.Logout);
 */
 app.post("/CheckLogin",funs.CheckLogin);

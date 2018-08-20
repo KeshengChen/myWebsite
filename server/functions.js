@@ -1,3 +1,5 @@
+import { fail } from 'assert';
+
 'use strict'
    Object.defineProperty(exports, "__esModule", {
         value: true
@@ -37,6 +39,18 @@ class functions{
         }
     }
 */   
+async ReturnUserInfo(Id){
+    if("number" ==typeof Id){
+        let r = await this.Database.UserInfo.Select({Id});
+        r.data[0].photolist=[];
+        r.data[0].messagelist=[];
+        delete r.data[0].PassWord;
+        return r.data[0];
+    }else{
+        return {};
+    }
+
+}
  async Login(req,res,next){
         let Alias = req.body.Alias;
 		let r = {};
@@ -48,10 +62,11 @@ class functions{
 		}
         if(r.result=="OK"){
             req.session.sign=true;
-            req.session.UserInfo=r.data;
-            res.json({login:true,username:r.data[0].UserName,msg:"登录成功。",photolist:[],messagelist:[]});
+            req.session.UserInfo=r.data[0];
+            let userinfo=(req.session.UserInfo.Id);
+            res.json({login:true,msg:"登录成功。",userinfo});
         }else{
-            res.json({login:false,msg:"账户或密码不匹配。"});
+            res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
         }
     }
 /*
@@ -60,9 +75,25 @@ class functions{
         req.session.UserInfo=undefined;
         res.json({logout:"OK"});
     }
-    UploadHeadImage(req,res,next){
-        console.log(req.files[0].path);
+    */
+    async UploadHeadImage(req,res,next){
+        console.log(req.files[0]);
+        let HIname=req.session.UserInfo.Id+".jpg";
+        fs.moveSync(req.files[0].path,path.join(__dirname,"HeadImage",HIname))
+        req.session.UserInfo.HeadImage=HIname;
+        try{
+			r = await this.Database.UserInfo.Update(req.session.UserInfo);
+		}catch(e){
+			r = e;
+		}
+        if(r.result=="OK"){
+            let userinfo=(req.session.UserInfo.Id);
+            res.json({success:true,msg:"上传成功。",userinfo});
+        }else{
+            res.json({success:false,msg:"上传不成功。"});
+        }
     }
+    /*
     CheckLogin(req,res,next){
         if(req.session.sign){
             res.json({login:true,username:req.session.UserInfo.UserName});
