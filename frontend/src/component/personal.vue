@@ -11,7 +11,7 @@
                     <div :style="src"></div>
                 </div>
                 <div class="userinfo">
-                    <div class="headarea"  :style="src" @click="fillallsc"></div> 
+                    <div class="headarea"  :style="HIsrc" @click="fillallsc"></div> 
                     <div style="flex:0 0 1rem"></div>
                     <div class="userdetail">
                         <div>{{this.$store.state.UserInfo.UserName}}<span>&equiv;</span></div>
@@ -60,6 +60,19 @@ export default {
     data(){
         return {allscreen:false,headchanged:false,headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false,file:false}
     },
+    computed:{
+        HIsrc(){
+            this.$http.post("/HeadImage",cer).then((res)=>{
+                console.log(res.data)
+                if(!res.data.success){
+                    return "";    
+                }else{
+                    this.src='background-image:url('+window.URL.createObjectURL(res.blob())+')'
+                    return this.src;	
+                }
+            })
+        }            
+    },
     methods:{
         selectImage(){
 			this.$refs.filterGetter.click();
@@ -72,7 +85,7 @@ export default {
 			let config = {
 				headers: {'Content-Type': 'multipart/form-data'}
 			}
-			this.$http.post("http://gfs920q.cn/UploadHeadImage",param,config).then((res)=>{
+			this.$http.post("/UploadHeadImage",param,config).then((res)=>{
                 if(res.data.login===false){              
                     this.msg=res.data.msg;
                 }else if(res.data.success===true){    

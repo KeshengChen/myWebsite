@@ -60,7 +60,7 @@ async ReturnUserInfo(Id){
         if(r.result=="OK"){
             req.session.sign=true;
             req.session.UserInfo=r.data[0];
-            let userinfo=await ReturnUserInfo(req.session.UserInfo.Id);
+            let userinfo=await this.ReturnUserInfo(req.session.UserInfo.Id);
             res.json({login:true,msg:"登录成功。",userinfo});
         }else{
             res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
@@ -73,9 +73,12 @@ async ReturnUserInfo(Id){
         res.json({logout:"OK"});
     }
     */
+    async DeliveryHeadImage(req,res,next){
+        let HI=path.join(__dirname,"HeadImage",req.session.UserInfo.Id)
+        res.sendfile(HI)
+    }
     async UploadHeadImage(req,res,next){
-        console.log(req.files[0]);
-        let HIname=req.session.UserInfo.Id+".jpg";
+        let HIname=req.session.UserInfo.Id;
         fs.moveSync(req.files[0].path,path.join(__dirname,"HeadImage",HIname))
         req.session.UserInfo.HeadImage=HIname;
         try{
@@ -84,7 +87,7 @@ async ReturnUserInfo(Id){
 			r = e;
 		}
         if(r.result=="OK"){
-            let userinfo=await ReturnUserInfo(req.session.UserInfo.Id);
+            let userinfo=await this.ReturnUserInfo(req.session.UserInfo.Id);
             res.json({success:true,msg:"上传成功。",userinfo});
         }else{
             res.json({success:false,msg:"上传不成功。"});

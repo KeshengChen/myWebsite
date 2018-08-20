@@ -1,6 +1,7 @@
 ﻿'use strict'
 let express = require('express');
 let uuid = require('uuid');
+let fs = require('fs');
 let path = require('path');
 let funImport = require('./functions.js');
 let bodyParser = require('body-parser');
@@ -29,6 +30,9 @@ app.use(session({
      next();
  });
 let functions = funImport.functions;
+functions.prototype.fs=fs;
+functions.prototype.path=path;
+functions.prototype.uuid=uuid;
 let funs =new functions();
 function checklogin(req,res,next){ 
     if(req.session.sign || req.path=="/Login" || req.path=="/CheckLogin"){
@@ -43,13 +47,11 @@ app.post("/SignUp",funs.SignUp);
 app.post("/CheckAliasExists",funs.CheckAliasExists);
 */
 app.post("/Login",funs.Login.bind(funs));
-
 app.post("/UploadHeadImage",funs.UploadHeadImage.bind(funs));
+app.post("/HeadImage",funs.DeliveryHeadImage.bind(funs));
 /*app.post("/ChangeUserInfo",funs.ChangeUserInfo);
 app.post("/Logout",funs.Logout);
-*/
 app.post("/CheckLogin",funs.CheckLogin);
-/*
 app.post("/UploadPhoto",funs.UploadPhoto);
 app.post("/GetPhotoList",funs.GetPhotoList);
 */
