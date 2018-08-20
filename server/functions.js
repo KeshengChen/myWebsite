@@ -1,5 +1,3 @@
-import { fail } from 'assert';
-
 'use strict'
    Object.defineProperty(exports, "__esModule", {
         value: true
@@ -49,7 +47,6 @@ async ReturnUserInfo(Id){
     }else{
         return {};
     }
-
 }
  async Login(req,res,next){
         let Alias = req.body.Alias;
@@ -63,7 +60,7 @@ async ReturnUserInfo(Id){
         if(r.result=="OK"){
             req.session.sign=true;
             req.session.UserInfo=r.data[0];
-            let userinfo=(req.session.UserInfo.Id);
+            let userinfo=await ReturnUserInfo(req.session.UserInfo.Id);
             res.json({login:true,msg:"登录成功。",userinfo});
         }else{
             res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
@@ -87,7 +84,7 @@ async ReturnUserInfo(Id){
 			r = e;
 		}
         if(r.result=="OK"){
-            let userinfo=(req.session.UserInfo.Id);
+            let userinfo=await ReturnUserInfo(req.session.UserInfo.Id);
             res.json({success:true,msg:"上传成功。",userinfo});
         }else{
             res.json({success:false,msg:"上传不成功。"});

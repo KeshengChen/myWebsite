@@ -14,7 +14,7 @@
                     <div class="headarea"  :style="src" @click="fillallsc"></div> 
                     <div style="flex:0 0 1rem"></div>
                     <div class="userdetail">
-                        <div>{{this.$store.state.UserName}}<span>&equiv;</span></div>
+                        <div>{{this.$store.state.UserInfo.UserName}}<span>&equiv;</span></div>
                         <div>帐号:{{this.$store.state.Alias}}</div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
 <script>
 export default {
     data(){
-        return {allscreen:false,headchanged:false,headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false}
+        return {allscreen:false,headchanged:false,headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false,file:false}
     },
     methods:{
         selectImage(){
@@ -66,7 +66,22 @@ export default {
         }, 
         saveHeadImage(){
             this.headchanged=false;
-            console.log("saveHeadImage 000")
+        	let param = new FormData() 
+				param.append('file', this.file, this.file.name) 
+			
+			let config = {
+				headers: {'Content-Type': 'multipart/form-data'}
+			}
+			this.$http.post("http://gfs920q.cn/UploadHeadImage",param,config).then((res)=>{
+                if(res.data.login===false){              
+                    this.msg=res.data.msg;
+                }else if(res.data.success===true){    
+                    this.$store.commit({
+                        type:'change',
+                        userinfo:res.data.userinfo
+                    }) 
+                }
+			})
         },
         fillallsc(){
             this.allscreen=true;
@@ -85,7 +100,10 @@ export default {
         getfiles(event){
             if(event.target.files.length>0){
                 this.headchanged=true;
+                this.file=event.target.files[0]
 			    this.src='background-image:url('+window.URL.createObjectURL(event.target.files[0])+')';				
+            }else{
+                this.file=false; 
             }
         },
         swapModel(){
@@ -93,13 +111,13 @@ export default {
         },
         login(){
             if(this.alias==''){
-            this.msg="请输入账号。";
-            return;
+                this.msg="请输入账号。";
+                return;
             }else if(this.pwd==''){
-            this.msg="请输入密码。";
-            return;
+                this.msg="请输入密码。";
+                return;
             }else{
-            this.msg='';
+                this.msg='';
             }
             var cer={};
             cer.Alias=this.alias;
@@ -112,9 +130,7 @@ export default {
                     this.$store.commit({
                         type:'login',
                         islogin:res.data.login,
-                        username:res.data.username,
-                        photolist:res.data.photolist,
-                        messagelist:res.data.messagelist
+                        userinfo:res.data.userinfo
                     })     
                 }else{
                     this.msg=res.data.msg;

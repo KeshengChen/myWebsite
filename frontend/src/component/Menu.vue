@@ -31,7 +31,7 @@
 export default {
     computed:{
         UserName(){   
-            return this.$store.state.UserName;
+            return this.$store.state.UserInfo.UserName;
         },
         IsLogin(){
             return this.$store.state.IsLogin; 

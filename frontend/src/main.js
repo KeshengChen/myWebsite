@@ -54,22 +54,21 @@ router.afterEach((to, from, next) => {
   const store = new Vuex.Store({
     state:{
       IsLogin:false,
-      UserName:'',
+      UserInfo:{},
       PhotoList:[],
       MessageList:[]
     },
     mutations:{
         login(state,params){
             state.IsLogin=params.islogin;
-            state.UserName=params.username;
-            state.PhotoList=params.photolist;
-            state.MessageList=params.messagelist;
+            state.UserInfo=params.userinfo;
+        },
+        change(state,params){
+            state.UserInfo=params.userinfo;
         },
         logout(state){
             state.IsLogin=false;
-            state.UserName="";
-            state.PhotoList=[];
-            state.MessageList=[];
+            state.UserInfo={PhotoList:[],MessageList:[]};
         }
     }
   });
