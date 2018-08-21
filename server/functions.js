@@ -101,8 +101,7 @@ async Login(req,res,next){
     async UploadHeadImage(req,res,next){
 		let r = {};
         let HIname=this.path.join(__dirname,"HeadImage",this.uuid.v1());
-        var image = this.gm(req.files[0].path);
-     
+        let minlen=500;
         try{
             minlen = await new Promise((resolve,reject)=>{
                 this.child_process.exec("identify "+req.files[0].path,function(err,stdout,stderr){
@@ -111,7 +110,7 @@ async Login(req,res,next){
                     let arr = stdout.split(' ');
                     console.log(stdout)
                     arr.forEach((item)=>{
-                        if(item.contains('x')&&!item.contains('+')){                            
+                        if(item.indexOf('x')>=0&&item.indexOf('+')<0){                            
                             let tmparr=item.split('x');
                             let r=parseInt(tmparr[0])<parseInt(tmparr[1])?parseInt(tmparr[0]):parseInt(tmparr[1]);
                             resolve(r)
@@ -120,12 +119,14 @@ async Login(req,res,next){
                 })
             })
         }catch(e){
-            let minlen=500;
+            minlen=500;
             console.log(e);
         }
-        let cmdline="convert" +req.files[0].path+" -resize 80x80 "+HIname+";";
-        cmdline+="convert" +req.files[0].path+" -resize 500x500 "+HIname+"HD;";
+        let cmdline="convert " +req.files[0].path+" -resize 80x80 "+HIname+";";
+        cmdline+="convert " +req.files[0].path+" -resize 500x500 "+HIname+"HD;";
         cmdline+="rm " +req.files[0].path+";";
+        console.log(cmdline)      
+		  this.child_process.exec(cmdline)
         req.session.UserInfo.HeadImage=HIname;
         req.session.UserInfo.HDHeadImage="HD" + HIname;
         try{
