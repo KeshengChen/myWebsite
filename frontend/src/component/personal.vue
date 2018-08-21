@@ -58,25 +58,22 @@
 <script>
 export default {
     data(){
-        return {allscreen:false,headchanged:false,headimage:{},src:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false,file:false}
+        return {allscreen:false,headchanged:false,headimage:{},src:"",HIsrc:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false,file:false}
     },
-    computed:{
-       async HIsrc(){
-let x="";
-         try{
-			 x = await this.$http.post(
-				"/HeadImage",undefined,{responseType:'blob'}
-			).then(
-				(res)=>{
-					 let tmp='background-image:url('+window.URL.createObjectURL(res.data)+')'
-					return tmp;			
-				}
-			)}catch(e){
-			x=""
-		}		
-		return x
+    mounted(){
+		this.getHIsrc();
     },
     methods:{
+		getHIsrc(){
+				this.$http.post(
+					"/HeadImage",undefined,{responseType:'blob'}
+				).then(
+					function(res){
+						this.HIsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
+						this.src=this.HIsrc;
+						}.bind(this)
+					)
+		},
         selectImage(){
 			this.$refs.filterGetter.click();
         }, 
@@ -96,6 +93,7 @@ let x="";
                         type:'change',
                         userinfo:res.data.userinfo
                     }) 
+					this.getHIsrc();
                 }
 			})
         },

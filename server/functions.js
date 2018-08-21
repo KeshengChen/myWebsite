@@ -50,11 +50,8 @@ async ReturnUserInfo(Id){
     }
     */
     async DeliveryHeadImage(req,res,next){
-			console.log("x")	
 	    let HI = this.path.join(__dirname,"HeadImage",req.session.UserInfo.Id+"");
-			console.log("2x")	
         this.fs.readFile(HI, function(err, data) {
-			console.log(err)	
             if (err) {
               res.end();
             }
