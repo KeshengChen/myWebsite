@@ -95,26 +95,30 @@ async Login(req,res,next){
 		let r = {};
         let HIname=this.path.join(__dirname,"HeadImage",this.uuid.v1());
         var image = this.gm(req.files[0].path);
-        let minlen = await new Promise((resolve,reject)=>{
-            image.size((err,size)=>{
-                if(err) {
-                    reject(err);
-                }
-                resolve(size.width > size.height?size.height:size.width );
+     
+        try{
+            minlen = await new Promise((resolve,reject)=>{
+                this.child_process.exec("identify "+req.files[0].path,function(err,stdout,stderr){
+                    if(err) reject(err);
+                    if(stderr) reject(stderr);
+                    let arr = stdout.split(' ');
+                    console.log(stdout)
+                    arr.forEach((item)=>{
+                        if(item.contains('x')&&!item.contains('+')){                            
+                            let tmparr=item.split('x');
+                            let r=parseInt(tmparr[0])<parseInt(tmparr[1])?parseInt(tmparr[0]):parseInt(tmparr[1]);
+                            resolve(r)
+                        }
+                    })
+                })
             })
-        })
-        image
-        .crop(minlen,minlen,0,0)
-        .resize(600<minlen?600:minlen,600<minlen?600:minlen)
-        .write('HD'+HIname, function (err) {
-            if (!err) console.log('crazytown has arrived');
-        });
-        image
-        .resize(80,80)
-        .write(HIname, function (err) {
-            if (!err) console.log('crazytown has arrived');
-        });
-		this.fs.renameSync(req.files[0].path,HIname)
+        }catch(e){
+            let minlen=500;
+            console.log(e);
+        }
+        let cmdline="convert" +req.files[0].path+" -resize 80x80 "+HIname+";";
+        cmdline+="convert" +req.files[0].path+" -resize 500x500 "+HIname+"HD;";
+        cmdline+="rm " +req.files[0].path+";";
         req.session.UserInfo.HeadImage=HIname;
         req.session.UserInfo.HDHeadImage="HD" + HIname;
         try{
