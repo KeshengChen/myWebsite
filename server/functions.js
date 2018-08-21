@@ -8,11 +8,41 @@ class functions{
     constructor(){
         this.Database= new testWebsite();
 	}
-/*    async SignUp(req,res,next){
+    async SignUp(req,res,next){
+        let userinfo = this.Database.UserInfo.NewRowData();
+        userinfo.UserName=req.body.UserName;
+        userinfo.Alias=req.body.Alias;
+        userinfo.PassWord=req.body.pwd;
+        let r = {};
+        try{
+			r = await this.Database.UserInfo.Insert(userinfo);
+            r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
+		}catch(e){
+			r = e;
+		}
+        if(r.result=="OK"){
+            req.session.sign=true;
+            req.session.UserInfo=r.data[0];
+            res.json({success:true,msg:"创建并登录成功。",userinfo:r.userinfo});
+        }else{
+            res.json({success:false,msg:"未知原因。",userinfo:{}});
+        }
     }
-    async CheckAliasExists(req,res,next){        
+    async CheckAliasExists(req,res,next){  
+        let Alias = req.body.Alias;
+        let r = {};
+        try{
+            r = await this.Database.UserInfo.Select({Alias});
+        }catch(e){
+            r = e;
+        }
+        if(r.result=="OK"){
+            res.json({exist:true,msg:"账号已经存在。",userinfo:r.userinfo});
+        }else{
+            res.json({exist:false,msg:"",userinfo:{}});
+        }      
     }
-*/   
+   
 async ReturnUserInfo(Id){
     if("number" ==typeof Id){
         let r = await this.Database.UserInfo.Select({Id});
@@ -24,24 +54,24 @@ async ReturnUserInfo(Id){
         return {};
     }
 }
- async Login(req,res,next){
-        let Alias = req.body.Alias;
-		let r = {};
-        let PassWord = req.body.PassWord;
-        try{
-			r = await this.Database.UserInfo.Select({Alias,PassWord});
-            r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
-		}catch(e){
-			r = e;
-		}
-        if(r.result=="OK"){
-            req.session.sign=true;
-            req.session.UserInfo=r.data[0];
-            res.json({login:true,msg:"登录成功。",userinfo:r.userinfo});
-        }else{
-            res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
-        }
+async Login(req,res,next){
+    let Alias = req.body.Alias;
+    let r = {};
+    let PassWord = req.body.PassWord;
+    try{
+        r = await this.Database.UserInfo.Select({Alias,PassWord});
+        r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
+    }catch(e){
+        r = e;
     }
+    if(r.result=="OK"){
+        req.session.sign=true;
+        req.session.UserInfo=r.data[0];
+        res.json({login:true,msg:"登录成功。",userinfo:r.userinfo});
+    }else{
+        res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
+    }
+}
 /*
     Logout(req,res,next){
         req.session.sign=false;

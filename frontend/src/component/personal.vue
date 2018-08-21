@@ -29,7 +29,7 @@
                 </div>
                 <div>
                     <article>账号:</article>
-                    <input v-model="alias" placeholder="输入账号" type="text"/>
+                    <input v-model="alias" @chage="checkIfExists" placeholder="输入账号" type="text"/>
                 </div>
                 <div>
                     <article>密码:</article>
@@ -58,7 +58,19 @@
 <script>
 export default {
     data(){
-        return {allscreen:false,headchanged:false,headimage:{},src:"",HIsrc:"",username:"",alias:"sa2",pwd:"pwd",pwd2:"",msg:"",issignup:false,file:false}
+        return {allscreen:false,
+        headchanged:false,
+        headimage:{},
+        src:"",
+        HIsrc:"",
+        username:"",
+        alias:"sa2",
+        pwd:"pwd",
+        pwd2:"",
+        msg:"",
+        issignup:false,
+        aliasexists:true,
+        file:false}
     },
     mounted(){
 		this.getHIsrc();
@@ -145,11 +157,21 @@ export default {
                         type:'login',
                         islogin:res.data.login,
                         userinfo:res.data.userinfo
-                    })     
+                    })    
                 }else{
                     this.msg=res.data.msg;
                 }
             })
+        },
+        checkIfExists(){
+            if(issignup&&alias.length>0){
+                let cer={};
+                cer.alias=this.alias
+                this.$http.post('/CheckAliasExists',cer).then((res=>{
+                    this.aliasexists=res.data.exist;
+                    this.msg=res.data.msg;
+                }))
+            }
         },
         signup(){
             if(this.username==''){
@@ -164,6 +186,9 @@ export default {
             }else if(this.pwd2==''){
                 this.msg="请确认密码。";
                 return;
+            }else if(this.aliasexists){
+                this.msg="账号已经被占用。";
+                return;
             }else if(this.pwd2!=this.pwd1){
                 this.msg="密码不一致。";
                 return;
@@ -174,11 +199,24 @@ export default {
                 this.msg='';
             }
             var cer={};
-            cer.username=this.username;
-            cer.alias=this.alias;
+            cer.UserName=this.username;
+            cer.Alias=this.alias;
             let md5 = crypto.createHash("md5");
             cer.pwd= md5.update(this.pwd1).digest("hex");
-
+            this.$http.post('/SignUp',cer).then((res)=>{
+                if(res.success==true){
+                if(res.data.login){
+                    this.$store.commit({
+                        type:'login',
+                        islogin:true,
+                        userinfo:res.data.userinfo
+                    })    
+                    this.$router.push('/personal')
+                }else{
+                    this.msg=res.data.msg;
+                }
+                }
+            })
         }
     }
 }
