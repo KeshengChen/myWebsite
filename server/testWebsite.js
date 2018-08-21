@@ -108,7 +108,8 @@ class Table{
                 UserName:'',
                 PassWord:'',
                 IsAdmin:0,
-                HeadImage:''
+                HeadImage:'',
+                HDHeadImage:''
             }
         };
 

@@ -80,20 +80,43 @@ async Login(req,res,next){
     }
     */
     async DeliveryHeadImage(req,res,next){
-	    let HI = this.path.join(__dirname,"HeadImage",req.session.UserInfo.Id+"");
-        this.fs.readFile(HI, function(err, data) {
-            if (err) {
-              res.end();
-            }
-            res.send(data);
-            res.end();
-        })    
+        let HI = req.session.UserInfo.HeadImage;
+        let p =  new Promise((resolve,reject)=>{            
+            this.fs.readFile(HI, function(err, data) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(data);
+            })  
+        }) 
+        let data = await p;
 	}
     async UploadHeadImage(req,res,next){
 		let r = {};
-		let HIname=req.session.UserInfo.Id.toString();
-		this.fs.renameSync(req.files[0].path,this.path.join(__dirname,"HeadImage",HIname))
+        let HIname=this.path.join(__dirname,"HeadImage",this.uuid.v1());
+        var image = this.gm(req.files[0].path);
+        let minlen = await new Promise((resolve,reject)=>{
+            image.size((err,size)=>{
+                if(err) {
+                    reject(err);
+                }
+                resolve(size.width > size.height?size.height:size.width );
+            })
+        })
+        image
+        .crop(minlen,minlen,0,0)
+        .resize(600<minlen?600:minlen,600<minlen?600:minlen)
+        .write('HD'+HIname, function (err) {
+            if (!err) console.log('crazytown has arrived');
+        });
+        image
+        .resize(80,80)
+        .write(HIname, function (err) {
+            if (!err) console.log('crazytown has arrived');
+        });
+		this.fs.renameSync(req.files[0].path,HIname)
         req.session.UserInfo.HeadImage=HIname;
+        req.session.UserInfo.HDHeadImage="HD" + HIname;
         try{
 			r = await this.Database.UserInfo.Update(req.session.UserInfo);
 		}catch(e){

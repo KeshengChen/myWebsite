@@ -3,6 +3,7 @@ let express = require('express');
 let uuid = require('uuid');
 let fs = require('fs');
 let path = require('path');
+let gm = require('gm').subClass({imageMagick: true});
 let funImport = require('./functions.js');
 let bodyParser = require('body-parser');
 let multer = require('multer');
@@ -33,6 +34,7 @@ let functions = funImport.functions;
 functions.prototype.fs=fs;
 functions.prototype.path=path;
 functions.prototype.uuid=uuid;
+functions.prototype.gm =gm;
 let funs =new functions();
 function checklogin(req,res,next){ 
     if(req.session.sign || req.path=="/Login" || req.path=="/CheckLogin"){

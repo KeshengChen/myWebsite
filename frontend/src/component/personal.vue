@@ -63,6 +63,7 @@ export default {
         headimage:{},
         src:"",
         HIsrc:"",
+        HDsrc:"",
         username:"",
         alias:"sa2",
         pwd:"pwd",
@@ -72,19 +73,16 @@ export default {
         aliasexists:true,
         file:false}
     },
-    mounted(){
-		this.getHIsrc();
-    },
     methods:{
 		getHIsrc(){
-				this.$http.post(
-					"/HeadImage",undefined,{responseType:'blob'}
-				).then(
-					function(res){
-						this.HIsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
-						this.src=this.HIsrc;
-						}.bind(this)
-					)
+            this.$http.post(
+                "/HeadImage",undefined,{responseType:'blob'}
+            ).then(
+                function(res){
+                    this.HIsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
+                    this.src=this.HIsrc;
+                    }.bind(this)
+                )
 		},
         selectImage(){
 			this.$refs.filterGetter.click();
@@ -105,7 +103,7 @@ export default {
                         type:'change',
                         userinfo:res.data.userinfo
                     }) 
-					this.getHIsrc();
+                    this.getHIsrc();
                 }
 			})
         },
@@ -117,8 +115,9 @@ export default {
                 if(confirm("保存？")){
                     this.saveHeadImage();
                 }
+                this.change=false;  
             }
-          this.allscreen=false;  
+            this.allscreen=false;  
         },   
         logout(){
             this.$store.commit({type:'logout'}) 
@@ -157,7 +156,8 @@ export default {
                         type:'login',
                         islogin:res.data.login,
                         userinfo:res.data.userinfo
-                    })    
+                    }) 
+                    this.getHIsrc();   
                 }else{
                     this.msg=res.data.msg;
                 }
