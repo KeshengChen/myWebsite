@@ -81,9 +81,9 @@ export default {
                 function(res){
                     this.HIsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
                     this.src=this.HIsrc;
-                    }.bind(this)
-                )
-		},
+                }.bind(this)
+            )
+        },
         selectImage(){
 			this.$refs.filterGetter.click();
         }, 
@@ -109,6 +109,13 @@ export default {
         },
         fillallsc(){
             this.allscreen=true;
+               this.$http.post(
+                "/HeadImageHD",undefined,{responseType:'blob'}
+            ).then(
+                function(res){
+                    this.HDsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
+                }.bind(this)
+            )
         }, 
         hideallsc(){
             if(this.headchanged){
@@ -121,6 +128,8 @@ export default {
         },   
         logout(){
             this.$store.commit({type:'logout'}) 
+            this.$http.post('/Logout')
+            this.$router.push('/personal')
         },
         getfiles(event){
             if(event.target.files.length>0){

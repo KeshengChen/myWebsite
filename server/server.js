@@ -50,9 +50,11 @@ app.post("/CheckAliasExists",funs.CheckAliasExists);
 */
 app.post("/Login",funs.Login.bind(funs));
 app.post("/UploadHeadImage",funs.UploadHeadImage.bind(funs));
-app.post("/HeadImage",funs.DeliveryHeadImage.bind(funs));
+app.post("/HeadImage",funs.HeadImage.bind(funs));
+app.post("/HeadImageHD",funs.HeadImageHD.bind(funs));
+app.post("/Logout",funs.Logout.bind(funs));
 /*app.post("/ChangeUserInfo",funs.ChangeUserInfo);
-app.post("/Logout",funs.Logout);
+
 app.post("/CheckLogin",funs.CheckLogin);
 app.post("/UploadPhoto",funs.UploadPhoto);
 app.post("/GetPhotoList",funs.GetPhotoList);

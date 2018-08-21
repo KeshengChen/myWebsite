@@ -43,44 +43,49 @@ class functions{
         }      
     }
    
-async ReturnUserInfo(Id){
-    if("number" ==typeof Id){
-        let r = await this.Database.UserInfo.Select({Id});
-        r.data[0].photolist=[];
-        r.data[0].messagelist=[];
-        delete r.data[0].PassWord;
-        return r.data[0];
-    }else{
-        return {};
+    async ReturnUserInfo(Id){
+        if("number" ==typeof Id){
+            let r = await this.Database.UserInfo.Select({Id});
+            r.data[0].photolist=[];
+            r.data[0].messagelist=[];
+            delete r.data[0].PassWord;
+            return r.data[0];
+        }else{
+            return {};
+        }
     }
-}
-async Login(req,res,next){
-    let Alias = req.body.Alias;
-    let r = {};
-    let PassWord = req.body.PassWord;
-    try{
-        r = await this.Database.UserInfo.Select({Alias,PassWord});
-        r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
-    }catch(e){
-        r = e;
+    async Login(req,res,next){
+        let Alias = req.body.Alias;
+        let r = {};
+        let PassWord = req.body.PassWord;
+        try{
+            r = await this.Database.UserInfo.Select({Alias,PassWord});
+            r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
+        }catch(e){
+            r = e;
+        }
+        if(r.result=="OK"){
+            req.session.sign=true;
+            req.session.UserInfo=r.data[0];
+            res.json({login:true,msg:"登录成功。",userinfo:r.userinfo});
+        }else{
+            res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
+        }
     }
-    if(r.result=="OK"){
-        req.session.sign=true;
-        req.session.UserInfo=r.data[0];
-        res.json({login:true,msg:"登录成功。",userinfo:r.userinfo});
-    }else{
-        res.json({login:false,msg:"账户或密码不匹配。",userinfo:{}});
-    }
-}
-/*
     Logout(req,res,next){
         req.session.sign=false;
         req.session.UserInfo=undefined;
         res.json({logout:"OK"});
     }
-    */
-    async DeliveryHeadImage(req,res,next){
+    HeadImage(req,res,next){
         let HI = req.session.UserInfo.HeadImage;
+        this.DeliveryHeadImage(req,res,next,HI)
+    }
+    HeadImageHD(req,res,next){
+        let HI = req.session.UserInfo.HDHeadImage;
+        this.DeliveryHeadImage(req,res,next,HI)
+    }
+    async DeliveryHeadImage(req,res,next,HI){      
         let p =  new Promise((resolve,reject)=>{            
             this.fs.readFile(HI, function(err, data) {
                 if (err) {
@@ -125,10 +130,9 @@ async Login(req,res,next){
         let cmdline="convert " +req.files[0].path+" -resize 80x80 "+HIname+";";
         cmdline+="convert " +req.files[0].path+" -resize 500x500 "+HIname+"HD;";
         cmdline+="rm " +req.files[0].path+";";
-        console.log(cmdline)      
-		  this.child_process.exec(cmdline)
+        this.child_process.exec(cmdline)
         req.session.UserInfo.HeadImage=HIname;
-        req.session.UserInfo.HDHeadImage="HD" + HIname;
+        req.session.UserInfo.HDHeadImage=HIname+"HD";
         try{
 			r = await this.Database.UserInfo.Update(req.session.UserInfo);
 		}catch(e){
