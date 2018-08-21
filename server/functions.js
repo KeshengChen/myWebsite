@@ -89,7 +89,14 @@ async Login(req,res,next){
                 resolve(data);
             })  
         }) 
-        let data = await p;
+        try{
+            let data = await p;
+            res.send(data);
+            res.end();
+        }catch(e){
+            console.log(e);
+            res.end();
+        }
 	}
     async UploadHeadImage(req,res,next){
 		let r = {};
