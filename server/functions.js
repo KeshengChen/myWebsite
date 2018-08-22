@@ -130,7 +130,7 @@ class functions{
         let cmdline="convert " +req.files[0].path+" -resize 80x80 "+HIname+";";
         cmdline+="convert " +req.files[0].path+" -resize 500x500 "+HIname+"HD;";
         cmdline+="rm " +req.files[0].path+";";
-        this.child_process.exec(cmdline)
+        this.child_process.execSync(cmdline)
         req.session.UserInfo.HeadImage=HIname;
         req.session.UserInfo.HDHeadImage=HIname+"HD";
         try{
@@ -140,9 +140,10 @@ class functions{
 		}
         if(r.result=="OK"){
 			try{	
-				r.userinfo=await this.ReturnUserInfo(r.data[0].Id);
+				r.userinfo=await this.ReturnUserInfo(req.session.UserInfo.Id);
 				res.json({success:true,msg:"上传成功。",userinfo:r.userinfo});
             }catch(e){
+				console.log(e)
 				res.json({success:false,msg:"上传不成功。"});
 			}
         }else{

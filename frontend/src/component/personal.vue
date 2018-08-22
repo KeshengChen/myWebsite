@@ -8,8 +8,8 @@
                         <a v-if="!headchanged" href="javascript:void(0)" @click="selectImage">修改</a>
                         <a v-else href="javascript:void(0)" @click="saveHeadImage">保存</a>
                     </div>
-                    <div :style="src"></div>
-                </div>
+					<div :style="headchanged?src:HDsrc"></div>               
+				</div>
                 <div class="userinfo">
                     <div class="headarea"  :style="HIsrc" @click="fillallsc"></div> 
                     <div style="flex:0 0 1rem"></div>
@@ -96,14 +96,18 @@ export default {
 				headers: {'Content-Type': 'multipart/form-data'}
 			}
 			this.$http.post("/UploadHeadImage",param,config).then((res)=>{
-                if(res.data.login===false){              
+                console.log(res.data)
+				if(res.data.login===false){              
                     this.msg=res.data.msg;
                 }else if(res.data.success===true){    
                     this.$store.commit({
                         type:'change',
                         userinfo:res.data.userinfo
-                    }) 
+                    })
+					this.HIsrc=this.src; 
                     this.getHIsrc();
+					this.HDsrc=this.src;
+                    this.fillallsc();
                 }
 			})
         },
