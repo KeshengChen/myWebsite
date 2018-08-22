@@ -83,6 +83,15 @@ export default {
                     this.src=this.HIsrc;
                 }.bind(this)
             )
+            setTimeout(function(){                
+                this.$http.post(
+                    "/HeadImageHD",undefined,{responseType:'blob'}
+                ).then(
+                    function(res){
+                        this.HDsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
+                    }.bind(this)
+                )
+            }.bind(this),3000)
         },
         selectImage(){
 			this.$refs.filterGetter.click();
@@ -90,8 +99,7 @@ export default {
         saveHeadImage(){
             this.headchanged=false;
         	let param = new FormData() 
-				param.append('file', this.file, this.file.name) 
-			
+				param.append('file', this.file, this.file.name)			
 			let config = {
 				headers: {'Content-Type': 'multipart/form-data'}
 			}
@@ -105,21 +113,12 @@ export default {
                         userinfo:res.data.userinfo
                     })
 					this.HIsrc=this.src; 
-                    this.getHIsrc();
 					this.HDsrc=this.src;
-                    this.fillallsc();
                 }
 			})
         },
         fillallsc(){
             this.allscreen=true;
-               this.$http.post(
-                "/HeadImageHD",undefined,{responseType:'blob'}
-            ).then(
-                function(res){
-                    this.HDsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
-                }.bind(this)
-            )
         }, 
         hideallsc(){
             if(this.headchanged){

@@ -40,7 +40,8 @@ function checklogin(req,res,next){
     if(req.session.sign || req.path=="/Login" || req.path=="/CheckLogin"){
         next();
     }else{
-        res.redirect("/")
+        res.send({login:false})
+        res.end();
     }
 }
 app.use(checklogin);

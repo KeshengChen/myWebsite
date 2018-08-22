@@ -13,9 +13,7 @@
         </div>
         <div v-if="IsLogin">           
             <ul>
-                <li style="font-weight:bold">{{UserName}}</li>
-                <li><a href="javascript:void(0)" @click="lgout">退出</a></li>
-                <li><router-link to = "/personal">设置</router-link></li>
+                <router-link to="/personal">{{UserName}}</router-link>
             </ul>
         </div>
         <div v-else>
@@ -35,12 +33,6 @@ export default {
         },
         IsLogin(){
             return this.$store.state.IsLogin; 
-        }
-    },
-    methods:{
-        lgout(){
-            this.$store.commit({type:'logout'}) 
-            this.$router.push("/personal");  
         }
     }
 }
