@@ -15,7 +15,7 @@ class functions{
         userinfo.PassWord=req.body.pwd;
         let r = {};
         try{
-			r = await this.Database.UserInfo.Insert(userinfo);
+            r = await this.Database.UserInfo.Insert(userinfo);
             r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
 		}catch(e){
 			r = e;
@@ -113,7 +113,6 @@ class functions{
                     if(err) reject(err);
                     if(stderr) reject(stderr);
                     let arr = stdout.split(' ');
-                    console.log(stdout)
                     arr.forEach((item)=>{
                         if(item.indexOf('x')>=0&&item.indexOf('+')<0){                            
                             let tmparr=item.split('x');

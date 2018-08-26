@@ -91,7 +91,7 @@ export default {
                         this.HDsrc='background-image:url('+window.URL.createObjectURL(res.data)+')'
                     }.bind(this)
                 )
-            }.bind(this),3000)
+            }.bind(this),1000)
         },
         selectImage(){
 			this.$refs.filterGetter.click();
@@ -103,6 +103,8 @@ export default {
 			let config = {
 				headers: {'Content-Type': 'multipart/form-data'}
 			}
+					this.HIsrc=this.src; 
+					this.HDsrc=this.src;
 			this.$http.post("/UploadHeadImage",param,config).then((res)=>{
                 console.log(res.data)
 				if(res.data.login===false){              
@@ -112,8 +114,6 @@ export default {
                         type:'change',
                         userinfo:res.data.userinfo
                     })
-					this.HIsrc=this.src; 
-					this.HDsrc=this.src;
                 }
 			})
         },

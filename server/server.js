@@ -45,10 +45,8 @@ function checklogin(req,res,next){
     }
 }
 app.use(checklogin);
-/*
-app.post("/SignUp",funs.SignUp);
-app.post("/CheckAliasExists",funs.CheckAliasExists);
-*/
+app.post("/SignUp",funs.SignUp.bind(funs));
+app.post("/CheckAliasExists",funs.CheckAliasExists.bind(funs));
 app.post("/Login",funs.Login.bind(funs));
 app.post("/UploadHeadImage",funs.UploadHeadImage.bind(funs));
 app.post("/HeadImage",funs.HeadImage.bind(funs));
