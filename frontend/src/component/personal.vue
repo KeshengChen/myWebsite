@@ -73,6 +73,13 @@ export default {
         aliasexists:true,
         file:false}
     },
+    mounted(){
+        this.src='';
+        this.msg='';
+        this.issignup=false;
+        this.aliasexists=true;
+        this.file=false;
+    },
     methods:{
 		getHIsrc(){
             this.$http.post(
@@ -176,10 +183,12 @@ export default {
             })
         },
         checkIfExists(){
-            if(issignup&&alias.length>0){
+            console.log('checkIfExists');
+            if(this.issignup&&this.alias.length>0){
                 let cer={};
                 cer.alias=this.alias
                 this.$http.post('/CheckAliasExists',cer).then((res=>{
+                    console.log(res);
                     this.aliasexists=res.data.exist;
                     this.msg=res.data.msg;
                 }))
@@ -215,6 +224,7 @@ export default {
             cer.Alias=this.alias;
             let md5 = crypto.createHash("md5");
             cer.pwd= md5.update(this.pwd1).digest("hex");
+            console.log(cer)
             this.$http.post('/SignUp',cer).then((res)=>{
                 if(res.success==true){
                 if(res.data.login){
