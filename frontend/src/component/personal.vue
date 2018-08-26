@@ -29,7 +29,7 @@
                 </div>
                 <div>
                     <article>账号:</article>
-                    <input v-model="alias" @chage="checkIfExists" placeholder="输入账号" type="text"/>
+                    <input v-model="alias" @change="checkIfExists" placeholder="输入账号" type="text"/>
                 </div>
                 <div>
                     <article>密码:</article>
@@ -186,7 +186,7 @@ export default {
             console.log('checkIfExists');
             if(this.issignup&&this.alias.length>0){
                 let cer={};
-                cer.alias=this.alias
+                cer.Alias=this.alias
                 this.$http.post('/CheckAliasExists',cer).then((res=>{
                     console.log(res);
                     this.aliasexists=res.data.exist;
@@ -201,7 +201,7 @@ export default {
             }else if(this.alias==''){
                 this.msg="请输入账号。";
                 return;
-            }else if(this.pwd1==''){
+            }else if(this.pwd==''){
                 this.msg="请输入密码。";
                 return;
             }else if(this.pwd2==''){
@@ -210,7 +210,7 @@ export default {
             }else if(this.aliasexists){
                 this.msg="账号已经被占用。";
                 return;
-            }else if(this.pwd2!=this.pwd1){
+            }else if(this.pwd2!=this.pwd){
                 this.msg="密码不一致。";
                 return;
             }else if(this.pwd2.length<6){
@@ -222,8 +222,8 @@ export default {
             var cer={};
             cer.UserName=this.username;
             cer.Alias=this.alias;
-            let md5 = crypto.createHash("md5");
-            cer.pwd= md5.update(this.pwd1).digest("hex");
+            let md5 = this.crypto.createHash("md5");
+            cer.pwd= md5.update(this.pwd).digest("hex");
             console.log(cer)
             this.$http.post('/SignUp',cer).then((res)=>{
                 if(res.success==true){
@@ -232,8 +232,8 @@ export default {
                         type:'login',
                         islogin:true,
                         userinfo:res.data.userinfo
-                    })    
-                    this.$router.push('/personal')
+                    })
+				this.issignup=false;    
                 }else{
                     this.msg=res.data.msg;
                 }

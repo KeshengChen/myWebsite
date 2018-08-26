@@ -37,7 +37,12 @@ functions.prototype.uuid=uuid;
 functions.prototype.child_process =child_process;
 let funs =new functions();
 function checklogin(req,res,next){ 
-    if(req.session.sign || req.path=="/Login" || req.path=="/CheckLogin"){
+    if(req.session.sign 
+			|| req.path=="/Login" 
+			|| req.path=="/CheckLogin" 
+			|| req.path=='/SignUp'
+			|| req.path=='/CheckAliasExists'
+		){
         next();
     }else{
         res.send({login:false})

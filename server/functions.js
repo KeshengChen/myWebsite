@@ -9,13 +9,15 @@ class functions{
         this.Database= new testWebsite();
 	}
     async SignUp(req,res,next){
-        let userinfo = this.Database.UserInfo.NewRowData();
+        console.log(req.body)
+		let userinfo = this.Database.UserInfo.NewRowData();
         userinfo.UserName=req.body.UserName;
         userinfo.Alias=req.body.Alias;
         userinfo.PassWord=req.body.pwd;
         let r = {};
         try{
-            r = await this.Database.UserInfo.Insert(userinfo);
+            await this.Database.UserInfo.Insert(userinfo);
+			r = await this.Database.UserInfo.Select({Alias:userinfo.Alias,PassWord:userinfo.PassWord});
             r.userinfo = await this.ReturnUserInfo(r.data[0].Id);
 		}catch(e){
 			r = e;

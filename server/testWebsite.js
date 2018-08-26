@@ -26,7 +26,8 @@ class Table{
             }
         })
         let sql = "INSERT INTO " + this.TableName + "(" + this.fields.join(",") + ") VALUES(" + tmparr.join(",") + ")";
-        return this.Query(sql);
+		console.log(sql)
+	    return this.Query(sql);
     }
     Delete(Id){
         let sql = "DELETE FROM " + this.TableName + " WHERE Id = " + Id;
@@ -57,7 +58,8 @@ class Table{
             sql = "SELECT * FROM " + this.TableName + " WHERE Id=" + obj.Id;
         }else{
             this.fields.forEach((item)=>{
-                if("number" != typeof obj[item]){
+                 console.log(item+" : "+obj.item)
+				if("number" != typeof obj[item]){
         			if(obj[item] != '' && obj[item] != undefined) {
 						tmparr.push(item + " = '" + obj[item]+"'");
 					}
@@ -67,6 +69,7 @@ class Table{
             })
             sql = "SELECT * FROM " + this.TableName + " WHERE " + tmparr.join(" AND ");
         }
+		console.log(sql)
         return this.Query(sql);
     }
     Query(sql){
